@@ -1,0 +1,3 @@
+displayName = Food Overhaul Mod
+author = Jadams
+version = 0.1
