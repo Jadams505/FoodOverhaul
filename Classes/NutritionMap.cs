@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria;
+using FoodOverhaul.UI;
 namespace FoodOverhaul.Classes
 {
     public class NutritionMap
@@ -12,7 +13,7 @@ namespace FoodOverhaul.Classes
 
         private NutritionMap()
         {
-            init();
+            Init();
         }
 
         public static NutritionMap Instance()
@@ -24,12 +25,12 @@ namespace FoodOverhaul.Classes
             return INSTANCE;
         }
 
-        private void init()
+        private void Init()
         {
             MAP = new Dictionary<string, Nutrition>();
         }
 
-        public string ItemToKey(Item item)
+        public static string ItemToKey(Item item)
         {
             return item.ModItem == null ? ItemID.Search.GetName(item.netID) : item.ModItem.FullName;
         }
@@ -51,22 +52,22 @@ namespace FoodOverhaul.Classes
             Nutrition val;
             val = item.ModItem == null ? MAP.GetValueOrDefault(ItemID.Search.GetName(item.netID), new Nutrition()) : MAP.GetValueOrDefault(item.ModItem.FullName, new Nutrition());
 
-            TooltipLine tooltip = new TooltipLine(mod, "Nutrition Facts", "Nutrition Facts:");
+            TooltipLine tooltip = new(mod, "Nutrition Facts", "Nutrition Facts:");
             list.Add(tooltip);
-            tooltip = new(mod, "Fruit", val.fruit + " Fruits");
-            tooltip.overrideColor = Colors.RarityRed;
+            tooltip = new(mod, "Fruit", val.Fruits.Val + " Fruits");
+            tooltip.overrideColor = NutritionPanel.FRUIT_COLOR;
             list.Add(tooltip);
-            tooltip = new(mod, "Vegatable", val.vegatable + " Vegatables");
-            tooltip.overrideColor = Colors.RarityGreen;
+            tooltip = new(mod, "Vegatable", val.Vegatables.Val + " Vegatables");
+            tooltip.overrideColor = NutritionPanel.VEGETABLES_COLOR;
             list.Add(tooltip);
-            tooltip = new(mod, "Protein", val.protein + " Protein");
-            tooltip.overrideColor = Colors.RarityPurple;
+            tooltip = new(mod, "Protein", val.Protein.Val + " Protein");
+            tooltip.overrideColor = NutritionPanel.PROTEIN_COLOR;
             list.Add(tooltip);
-            tooltip = new(mod, "Carbs", val.carbs + " Carbs");
-            tooltip.overrideColor = Colors.RarityOrange;
+            tooltip = new(mod, "Carbs", val.Carbs.Val + " Carbs");
+            tooltip.overrideColor = NutritionPanel.CARBS_COLOR;
             list.Add(tooltip);
-            tooltip = new(mod, "Dairy", val.dairy + " Dairy");
-            tooltip.overrideColor = Colors.RarityBlue;
+            tooltip = new(mod, "Dairy", val.Dairy.Val + " Dairy");
+            tooltip.overrideColor = NutritionPanel.DAIRY_COLOR;
             list.Add(tooltip);
 
             return list;

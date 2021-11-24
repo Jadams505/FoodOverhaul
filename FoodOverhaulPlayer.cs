@@ -23,7 +23,7 @@ namespace FoodOverhaul
         }
         public override void PreUpdateBuffs()
         {
-            if(nutrition.protein == Nutrition.MAX)
+            if(nutrition.Protein.Val == Nutrition.MAX)
             {
                 Player.AddBuff(BuffID.WellFed, TimeUtil.Minutes(10));
             }
@@ -31,13 +31,12 @@ namespace FoodOverhaul
 
         public override void PostUpdateBuffs()
         {
-            if(nutrition.protein != 100)
+            if(nutrition.Protein.Val != Nutrition.MAX)
             {
                 Player.ClearBuff(BuffID.WellFed);
                 Player.ClearBuff(BuffID.WellFed2);
                 Player.ClearBuff(BuffID.WellFed3);
             }
-           
         }
 
         public override void PostUpdate()
@@ -55,11 +54,11 @@ namespace FoodOverhaul
             nutrition = Nutrition.Full();
             try
             {
-                nutrition.Protein(tag.GetInt("protein"));
-                nutrition.Fruit(tag.GetInt("fruits"));
-                nutrition.Vegatable(tag.GetInt("vegetables"));
-                nutrition.Carbs(tag.GetInt("carbs"));
-                nutrition.Dairy(tag.GetInt("dairy"));
+                nutrition.WithProtein(tag.GetInt("protein"));
+                nutrition.WithFruits(tag.GetInt("fruits"));
+                nutrition.WithVegatables(tag.GetInt("vegetables"));
+                nutrition.WithCarbs(tag.GetInt("carbs"));
+                nutrition.WithDairy(tag.GetInt("dairy"));
             }
             catch (Exception)
             {
@@ -68,11 +67,11 @@ namespace FoodOverhaul
 
         public override void SaveData(TagCompound tag)
         {
-            tag.Add("protein", nutrition.protein);
-            tag.Add("fruits", nutrition.fruit);
-            tag.Add("vegatables", nutrition.vegatable);
-            tag.Add("carbs", nutrition.carbs);
-            tag.Add("dairy", nutrition.dairy);
+            tag.Add("protein", nutrition.Protein.Val);
+            tag.Add("fruits", nutrition.Fruits.Val);
+            tag.Add("vegatables", nutrition.Vegatables.Val);
+            tag.Add("carbs", nutrition.Carbs.Val);
+            tag.Add("dairy", nutrition.Dairy.Val);
             base.SaveData(tag);
         }
 

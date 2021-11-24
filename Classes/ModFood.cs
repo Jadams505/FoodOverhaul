@@ -11,13 +11,7 @@ namespace FoodOverhaul.Classes
 
         public ModFood()
         {
-            nutrition = new Nutrition();
-        }
-
-        public override void SetStaticDefaults()
-        {
-            base.SetStaticDefaults();
-            Tooltip.SetDefault("Protein " + GetNutrition().protein);
+            nutrition = new();
         }
 
         public Nutrition GetNutrition()

@@ -1,60 +1,101 @@
-﻿namespace FoodOverhaul.Classes
+﻿using Microsoft.Xna.Framework;
+using Terraria.ID;
+namespace FoodOverhaul.Classes
 {
     public class Nutrition
     {
+        public static readonly int MAX = 100;
 
-        public const int MAX = 100;
-        public int protein { get; set; }
-        public int fruit { get; set; }
-        public int vegatable { get; set; }
-        public int dairy { get; set; }
-        public int carbs { get; set; }
-
-        public Nutrition Protein(int protein)
+        public struct Stat
         {
-            this.protein = protein;
+            public string Name { get; private set; }
+            public int Val { get; set; }
+            public Stat(string name)
+            {
+                Name = name;
+                Val = 0;
+            }
+
+            public override string ToString()
+            {
+                return Name + " " + Val;
+            }
+        }
+
+        public Stat Protein;
+        public Stat Fruits;
+        public Stat Vegatables;
+        public Stat Dairy;
+        public Stat Carbs;
+
+        public Nutrition()
+        {
+            Protein = new Stat("Protein");
+            Fruits = new Stat("Fruits");
+            Vegatables = new Stat("Vegatables");
+            Dairy = new Stat("Dairy");
+            Carbs = new Stat("Carbs");
+        }
+
+        public Nutrition WithProtein(int protein)
+        {
+            Protein.Val = protein;
             return this;
         }
 
-        public Nutrition Fruit(int fruit)
+        public Nutrition WithFruits(int fruits)
         {
-            this.fruit = fruit;
+            Fruits.Val = fruits;
             return this;
         }
 
-        public Nutrition Vegatable(int vegatable)
+        public Nutrition WithVegatables(int vegatables)
         {
-            this.vegatable = vegatable;
+            Vegatables.Val = vegatables;
             return this;
         }
-        public Nutrition Dairy(int dairy)
+        public Nutrition WithDairy(int dairy)
         {
-            this.dairy = dairy;
+            Dairy.Val = dairy;
             return this;
         }
-        public Nutrition Carbs(int carbs)
+        public Nutrition WithCarbs(int carbs)
         {
-            this.carbs = carbs;
+            Carbs.Val = carbs;
             return this;
         }
 
-        private static int Decrement(int field, int amount)
+        private static void Decrement(ref Stat stat, int amount)
         {
-            return field - amount > 0 ? field - amount : 0;
+            if(stat.Val - amount > 0)
+            {
+                stat.Val -= amount;
+            }
+            else
+            {
+                stat.Val = 0;
+            }
         }
 
         public void Decrement()
         {
-            protein = Decrement(protein, 1);
-            carbs = Decrement(carbs, 1);
-            dairy = Decrement(dairy, 1);
-            fruit = Decrement(fruit, 1);
-            vegatable = Decrement(vegatable, 1);
+            Decrement(ref Protein, 1);
+            Decrement(ref Carbs, 1);
+            Decrement(ref Dairy, 1);
+            Decrement(ref Fruits, 1);
+            Decrement(ref Vegatables, 1);
         }
 
-        private static int Add(int field, int amount)
+        private static void Add(ref Stat stat, int amount)
         {
-            return field + amount < MAX ? field + amount : MAX;
+            if(stat.Val + amount < MAX)
+            {
+                stat.Val += amount;
+            }
+            else
+            {
+                stat.Val = MAX;
+            }
         }
 
         public void Add(Nutrition other)
@@ -63,23 +104,22 @@
             {
                 other = new();
             }
-            protein = Add(protein, other.protein);
-            carbs = Add(carbs, other.carbs);
-            dairy = Add(dairy, other.dairy);
-            fruit = Add(fruit, other.fruit);
-            vegatable = Add(vegatable, other.vegatable);
+            Add(ref Protein, other.Protein.Val);
+            Add(ref Carbs, other.Carbs.Val);
+            Add(ref Dairy, other.Dairy.Val);
+            Add(ref Fruits, other.Fruits.Val);
+            Add(ref Vegatables, other.Vegatables.Val);
         }
 
         public static Nutrition Full()
         {
-            return new Nutrition().Vegatable(MAX).Dairy(MAX).Fruit(MAX).Carbs(MAX).Protein(MAX);
+            return new Nutrition().WithVegatables(MAX).WithDairy(MAX).WithFruits(MAX).WithCarbs(MAX).WithProtein(MAX);
         }
-
 
         public override string ToString()
         {
-            return "Protein " + protein + "\n" + "Carbs " + carbs + "\n" +
-                "Dairy " + dairy + "\n" + "Fruit " + fruit + "\n" + "Vegatable " + vegatable; 
+            return Protein.ToString() + "\n" + Carbs.ToString() + "\n" +
+                Dairy.ToString() + "\n" + Fruits.ToString() + "\n" + Vegatables.ToString(); 
         }
     }
 }

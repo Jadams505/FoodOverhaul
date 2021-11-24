@@ -11,11 +11,11 @@ namespace FoodOverhaul.Items.Food
 
 		public Cheese()
         {
-			nutrition.fruit = 0;
-			nutrition.dairy = 40;
-			nutrition.carbs = 10;
-			nutrition.protein = 20;
-			nutrition.vegatable = 0;
+			nutrition.Fruits.Val = 0;
+			nutrition.Dairy.Val = 40;
+			nutrition.Carbs.Val = 10;
+			nutrition.Protein.Val = 20;
+			nutrition.Vegatables.Val = 0;
         }
 
 		public override void SetDefaults()

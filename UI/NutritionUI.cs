@@ -11,7 +11,7 @@ namespace FoodOverhaul.UI
     {
         private static UserInterface _interface;
 
-        private static NutritionBar _panel;
+        private static NutritionPanel _panel;
         private static UIState _state;
 
         public static bool Enabled { get; private set; }
@@ -19,7 +19,7 @@ namespace FoodOverhaul.UI
         public static void Initialize()
         {
             Enabled = false;
-            _interface = new UserInterface();
+            _interface = new();
             _panel = new();
             _panel.Activate();
             _state = new();
@@ -31,7 +31,7 @@ namespace FoodOverhaul.UI
             if (Enabled)
             {
                 FoodOverhaulPlayer player = FoodOverhaulPlayer.GetModPlayer();
-                _panel.UpdateNutrition(player != null ? player.nutrition : new Nutrition());
+                _panel.UpdateNutrition(player != null ? player.nutrition : new());
                 _interface.Update(time);
             }
         }

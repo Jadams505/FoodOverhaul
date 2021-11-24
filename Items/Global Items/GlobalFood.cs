@@ -18,12 +18,12 @@ namespace FoodOverhaul.Items.Global_Items
 
         public override void SetDefaults(Item item)
         {
-            if(item.ModItem is ModFood)
+            if(item.ModItem is ModFood food)
             {
-                NutritionMap.Instance().Add(item, ((ModFood)item.ModItem).GetNutrition());
+                NutritionMap.Instance().Add(item, food.GetNutrition());
             }else
             {
-                NutritionMap.Instance().Add(item, new Nutrition());
+                NutritionMap.Instance().Add(item, new());
             }
             base.SetDefaults(item);
         }
@@ -41,10 +41,6 @@ namespace FoodOverhaul.Items.Global_Items
             {
                 Mod.Logger.Error(ex);
             }
-            //item.stack -= 1;
-           // player.ClearBuff(item.buffType);
-            
-            //player.ClearBuff(item.buffType);
         }
 
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
