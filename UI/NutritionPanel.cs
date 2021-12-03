@@ -3,7 +3,6 @@ using Terraria.UI;
 using Terraria.GameContent.UI.Elements;
 using Microsoft.Xna.Framework;
 using Terraria;
-using FoodOverhaul.Classes;
 using Terraria.ID;
 
 namespace FoodOverhaul.UI
@@ -50,7 +49,7 @@ namespace FoodOverhaul.UI
             Fruits.TextColor = FRUIT_COLOR;
             Dairy.TextColor = DAIRY_COLOR;
 
-            UpdateNutrition(new Nutrition());
+            UpdateNutrition(new());
 
             
             panel.Append(title);
@@ -81,13 +80,13 @@ namespace FoodOverhaul.UI
             base.Update(gameTime);
         }
 
-        public void UpdateNutrition(Nutrition nutrition)
+        public void UpdateNutrition(NutritionData nutrition)
         {
-            Fruits.SetText(nutrition.Fruits.ToString());
-            Vegetables.SetText(nutrition.Vegatables.ToString());
-            Protein.SetText(nutrition.Protein.ToString());
-            Carbs.SetText(nutrition.Carbs.ToString());
-            Dairy.SetText(nutrition.Dairy.ToString());
+            Fruits.SetText(nutrition.Fruits + " Fruits");
+            Vegetables.SetText(nutrition.Vegetables + " Vegetables");
+            Protein.SetText(nutrition.Protein + " Protein");
+            Carbs.SetText(nutrition.Carbs + " Carbs");
+            Dairy.SetText(nutrition.Dairy + " Dairy");
         }
 
         public override void MouseDown(UIMouseEvent evt)

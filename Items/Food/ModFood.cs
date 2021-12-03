@@ -7,14 +7,14 @@ namespace FoodOverhaul.Classes
     public abstract class ModFood : ModItem
     {
 
-        protected Nutrition nutrition;
+        protected NutritionData nutrition;
 
         public ModFood()
         {
             nutrition = new();
         }
 
-        public Nutrition GetNutrition()
+        public NutritionData GetNutrition()
         {
             return nutrition;
         }

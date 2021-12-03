@@ -1,5 +1,4 @@
 using Terraria.ModLoader;
-using Terraria;
 using FoodOverhaul.Util;
 
 namespace FoodOverhaul
@@ -9,6 +8,10 @@ namespace FoodOverhaul
         public override void Load()
         {
             KeybindManager.AddAllKeybinds(this);
+        }
+
+        public override void Unload()
+        {
         }
     }
 }

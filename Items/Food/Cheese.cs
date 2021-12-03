@@ -2,20 +2,18 @@ using Terraria;
 using Terraria.ID;
 using FoodOverhaul.Util;
 using FoodOverhaul.Classes;
-using Terraria.ModLoader;
 
 namespace FoodOverhaul.Items.Food
 {
 	public class Cheese : ModFood
 	{
-
 		public Cheese()
         {
-			nutrition.Fruits.Val = 0;
-			nutrition.Dairy.Val = 40;
-			nutrition.Carbs.Val = 10;
-			nutrition.Protein.Val = 20;
-			nutrition.Vegatables.Val = 0;
+			nutrition.Fruits = 0;
+			nutrition.Dairy = 40;
+			nutrition.Carbs = 10;
+			nutrition.Protein = 20;
+			nutrition.Vegetables = 0;
         }
 
 		public override void SetDefaults()

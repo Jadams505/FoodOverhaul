@@ -1,6 +1,5 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
-using FoodOverhaul.Classes;
 using Terraria.ModLoader.IO;
 using System;
 using Terraria.ID;
@@ -15,15 +14,15 @@ namespace FoodOverhaul
 
         public int Tick;
 
-        public Nutrition nutrition = Nutrition.Full();
+        public NutritionData nutrition = NutritionHelper.Full();
 
-        public void AddNutrition(Nutrition other)
+        public void AddNutrition(NutritionData other)
         {
-            nutrition.Add(other);
+            NutritionHelper.Add(ref nutrition, ref other);
         }
         public override void PreUpdateBuffs()
         {
-            if(nutrition.Protein.Val == Nutrition.MAX)
+            if(nutrition.Protein == NutritionData.MAX)
             {
                 Player.AddBuff(BuffID.WellFed, TimeUtil.Minutes(10));
             }
@@ -31,7 +30,7 @@ namespace FoodOverhaul
 
         public override void PostUpdateBuffs()
         {
-            if(nutrition.Protein.Val != Nutrition.MAX)
+            if(nutrition.Protein != NutritionData.MAX)
             {
                 Player.ClearBuff(BuffID.WellFed);
                 Player.ClearBuff(BuffID.WellFed2);
@@ -44,21 +43,21 @@ namespace FoodOverhaul
             Tick++;
             if(Tick % TimeUtil.Seconds(2) == 0)
             {
-                nutrition.Decrement();
+                NutritionHelper.Decrement(ref nutrition);
                 NutritionUI.UpdateNutrition(nutrition);
             }
         }
 
         public override void LoadData(TagCompound tag)
         {
-            nutrition = Nutrition.Full();
+            nutrition = NutritionHelper.Full();
             try
             {
-                nutrition.WithProtein(tag.GetInt("protein"));
-                nutrition.WithFruits(tag.GetInt("fruits"));
-                nutrition.WithVegatables(tag.GetInt("vegetables"));
-                nutrition.WithCarbs(tag.GetInt("carbs"));
-                nutrition.WithDairy(tag.GetInt("dairy"));
+                nutrition.Protein = tag.GetInt("protein");
+                nutrition.Fruits = tag.GetInt("fruits");
+                nutrition.Vegetables = tag.GetInt("vegetables");
+                nutrition.Carbs = tag.GetInt("carbs");
+                nutrition.Dairy = tag.GetInt("dairy");
             }
             catch (Exception)
             {
@@ -67,20 +66,16 @@ namespace FoodOverhaul
 
         public override void SaveData(TagCompound tag)
         {
-            tag.Add("protein", nutrition.Protein.Val);
-            tag.Add("fruits", nutrition.Fruits.Val);
-            tag.Add("vegatables", nutrition.Vegatables.Val);
-            tag.Add("carbs", nutrition.Carbs.Val);
-            tag.Add("dairy", nutrition.Dairy.Val);
+            tag.Add("protein", nutrition.Protein);
+            tag.Add("fruits", nutrition.Fruits);
+            tag.Add("vegatables", nutrition.Vegetables);
+            tag.Add("carbs", nutrition.Carbs);
+            tag.Add("dairy", nutrition.Dairy);
             base.SaveData(tag);
         }
 
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
-            if (KeybindManager.debug.JustPressed)
-            {
-                ChatUtil.Info(nutrition.ToString());
-            }
             if (KeybindManager.toggleNutrition.JustPressed)
             {
                 NutritionUI.Toggle();
@@ -99,7 +94,6 @@ namespace FoodOverhaul
             return null;
             
         }
-
 
     }
 }

@@ -36,7 +36,7 @@ namespace FoodOverhaul.UI
             }
         }
 
-        public static void UpdateNutrition(Nutrition nutrition)
+        public static void UpdateNutrition(NutritionData nutrition)
         {
             _panel.UpdateNutrition(nutrition);
         }
