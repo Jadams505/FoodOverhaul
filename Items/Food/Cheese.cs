@@ -1,7 +1,6 @@
 using Terraria;
 using Terraria.ID;
 using FoodOverhaul.Util;
-using FoodOverhaul.Classes;
 
 namespace FoodOverhaul.Items.Food
 {

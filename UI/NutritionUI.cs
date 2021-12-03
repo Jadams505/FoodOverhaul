@@ -1,9 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Terraria.UI;
 using Terraria;
-using Terraria.ModLoader;
-using FoodOverhaul.Classes;
-using System;
 
 namespace FoodOverhaul.UI
 {

@@ -14,11 +14,11 @@ namespace FoodOverhaul
 
         public int Tick;
 
-        public NutritionData nutrition = NutritionHelper.Full();
+        public NutritionData nutrition = NutritionData.Full();
 
         public void AddNutrition(NutritionData other)
         {
-            NutritionHelper.Add(ref nutrition, ref other);
+            nutrition.Add(ref other);
         }
         public override void PreUpdateBuffs()
         {
@@ -43,14 +43,14 @@ namespace FoodOverhaul
             Tick++;
             if(Tick % TimeUtil.Seconds(2) == 0)
             {
-                NutritionHelper.Decrement(ref nutrition);
+                nutrition.Decrement();
                 NutritionUI.UpdateNutrition(nutrition);
             }
         }
 
         public override void LoadData(TagCompound tag)
         {
-            nutrition = NutritionHelper.Full();
+            nutrition = NutritionData.Full();
             try
             {
                 nutrition.Protein = tag.GetInt("protein");

@@ -3,7 +3,7 @@ using Terraria;
 using Terraria.ModLoader;
 using FoodOverhaul.Util;
 using FoodOverhaul.UI;
-namespace FoodOverhaul.Items.Global_Items
+namespace FoodOverhaul.Items.Food
 {
     public class GlobalFood : GlobalItem
     {
@@ -42,7 +42,7 @@ namespace FoodOverhaul.Items.Global_Items
             List<TooltipLine> list = new();
             bool found = ModContent.GetInstance<NutritionConfig>().NutritionFacts.TryGetValue(new ItemNutritionPair(item.type, new()), out ItemNutritionPair pair);
             NutritionData val = found ? pair.Nutrition : new();
-            if (!NutritionHelper.Empty(ref val))
+            if (!val.Empty())
             {
                 TooltipLine tooltip = new(mod, "Nutrition Facts", "Nutrition Facts:");
                 list.Add(tooltip);

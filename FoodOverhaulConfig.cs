@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Terraria.ModLoader.Config;
-using FoodOverhaul.Classes;
+using FoodOverhaul.Items.Food;
 using Terraria.ID;
 using System.ComponentModel;
 using Terraria.ModLoader;
@@ -13,6 +13,7 @@ namespace FoodOverhaul
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
         public HashSet<ItemNutritionPair> NutritionFacts = Defaults.Default();
+
 
         public static NutritionConfig Get()
         {
@@ -148,6 +149,43 @@ namespace FoodOverhaul
         public override int GetHashCode()
         {
             return new { Protein, Carbs, Fruits, Vegetables, Dairy }.GetHashCode();
+        }
+        private static int ToBounds(int num)
+        {
+            return Math.Clamp(num, 0, MAX);
+        }
+        public void Decrement()
+        {
+            Protein = ToBounds(Protein - 1);
+            Fruits = ToBounds(Fruits - 1);
+            Carbs = ToBounds(Carbs - 1);
+            Dairy = ToBounds(Dairy - 1);
+            Vegetables = ToBounds(Vegetables - 1);
+        }
+
+        public void Add(ref NutritionData second)
+        {
+            Protein = ToBounds(Protein + second.Protein);
+            Fruits = ToBounds(Fruits + second.Fruits);
+            Carbs = ToBounds(Carbs + second.Carbs);
+            Dairy = ToBounds(Dairy + second.Dairy);
+            Vegetables = ToBounds(Vegetables + second.Vegetables);
+        }
+
+        public bool Empty()
+        {
+            return Fruits == 0 && Carbs == 0 && Dairy == 0 && Vegetables == 0 && Protein == 0;
+        }
+
+        public static NutritionData Full()
+        {
+            return new NutritionData(MAX, MAX, MAX, MAX, MAX);
+        }
+
+
+        public string Format()
+        {
+            return Protein + " Protein\n" + Carbs + " Carbs\n";
         }
 
     }

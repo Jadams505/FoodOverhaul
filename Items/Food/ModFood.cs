@@ -1,8 +1,6 @@
-﻿using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
+﻿using Terraria.ModLoader;
 
-namespace FoodOverhaul.Classes
+namespace FoodOverhaul.Items.Food
 {
     public abstract class ModFood : ModItem
     {
