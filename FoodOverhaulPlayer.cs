@@ -54,10 +54,10 @@ namespace FoodOverhaul
             try
             {
                 nutrition.Protein = tag.GetInt("protein");
-                nutrition.Fruits = tag.GetInt("fruits");
-                nutrition.Vegetables = tag.GetInt("vegetables");
+                nutrition.Calories = tag.GetInt("calories");
+                nutrition.Sodium = tag.GetInt("sodium");
                 nutrition.Carbs = tag.GetInt("carbs");
-                nutrition.Dairy = tag.GetInt("dairy");
+                nutrition.Fat = tag.GetInt("fat");
             }
             catch (Exception)
             {
@@ -67,10 +67,10 @@ namespace FoodOverhaul
         public override void SaveData(TagCompound tag)
         {
             tag.Add("protein", nutrition.Protein);
-            tag.Add("fruits", nutrition.Fruits);
-            tag.Add("vegatables", nutrition.Vegetables);
+            tag.Add("fat", nutrition.Fat);
+            tag.Add("calories", nutrition.Calories);
             tag.Add("carbs", nutrition.Carbs);
-            tag.Add("dairy", nutrition.Dairy);
+            tag.Add("sodium", nutrition.Sodium);
             base.SaveData(tag);
         }
 

@@ -5,6 +5,7 @@ using FoodOverhaul.Items.Food;
 using Terraria.ID;
 using System.ComponentModel;
 using Terraria.ModLoader;
+using Microsoft.Xna.Framework;
 
 namespace FoodOverhaul
 {
@@ -88,7 +89,7 @@ namespace FoodOverhaul
         }
         public override string ToString()
         {
-            return $"{Item.mod} {Item.name} {Nutrition.Protein} {Nutrition.Carbs} {Nutrition.Fruits} {Nutrition.Vegetables} {Nutrition.Dairy}";
+            return $"{Item.mod} {Item.name} {Nutrition.Calories} {Nutrition.Fat} {Nutrition.Sodium} {Nutrition.Carbs} {Nutrition.Protein}";
         }
         public static ItemNutritionPair FromString(string s)
         {
@@ -106,49 +107,54 @@ namespace FoodOverhaul
     {
         public const int MAX = 100;
 
-        [Range(0, MAX)]
-        [BackgroundColor(210, 160, 255)]
-        public int Protein;
+        public static readonly Color CALORIES_COLOR = Colors.RarityYellow;
+        public static readonly Color FAT_COLOR = Colors.RarityRed;
+        public static readonly Color SODIUM_COLOR = Colors.RarityBlue;
+        public static readonly Color CARBS_COLOR = Colors.RarityOrange;
+        public static readonly Color PROTEIN_COLOR = Colors.RarityPurple;
+        
+        [BackgroundColor(255, 255, 10)]
+        public int Calories;    
+        [BackgroundColor(255, 150, 150)]
+        public int Fat;
+        [BackgroundColor(150, 150, 255)]
+        public int Sodium;
         [BackgroundColor(255, 200, 150)]
         public int Carbs;
-        [BackgroundColor(255, 150, 150)]
-        public int Fruits;
-        [BackgroundColor(150, 255, 150)]
-        public int Vegetables;
-        [BackgroundColor(150, 150, 255)]
-        public int Dairy;
-
+        [BackgroundColor(210, 160, 255)]
+        public int Protein;
+        
         public NutritionData()
         {
-            Protein = 0;
+            Calories = 0;
+            Fat = 0;
+            Sodium = 0;
             Carbs = 0;
-            Fruits = 0;
-            Vegetables = 0;
-            Dairy = 0;
+            Protein = 0;
         }
 
-        public NutritionData(int protein, int carbs, int fruits, int vegetables, int dairy)
+        public NutritionData(int calories, int fat, int sodium, int carbs, int protein)
         {
-            Protein = protein;
+            Calories = calories;
+            Fat = fat;
+            Sodium = sodium;
             Carbs = carbs;
-            Fruits = fruits;
-            Vegetables = vegetables;
-            Dairy = dairy;
+            Protein = protein;
         }
 
         public override bool Equals(object obj)
         {
             if (obj is NutritionData other)
             {
-                return Protein == other.Protein && Carbs == other.Carbs && Fruits == other.Fruits
-                    && Vegetables == other.Vegetables && Dairy == other.Dairy;
+                return Protein == other.Protein && Carbs == other.Carbs && Fat == other.Fat
+                    && Sodium == other.Sodium && Calories == other.Calories;
             }
             return base.Equals(obj);
         }
 
         public override int GetHashCode()
         {
-            return new { Protein, Carbs, Fruits, Vegetables, Dairy }.GetHashCode();
+            return new { Protein, Carbs, Fat, Sodium, Calories }.GetHashCode();
         }
         private static int ToBounds(int num)
         {
@@ -157,24 +163,24 @@ namespace FoodOverhaul
         public void Decrement()
         {
             Protein = ToBounds(Protein - 1);
-            Fruits = ToBounds(Fruits - 1);
+            Calories = ToBounds(Calories - 1);
             Carbs = ToBounds(Carbs - 1);
-            Dairy = ToBounds(Dairy - 1);
-            Vegetables = ToBounds(Vegetables - 1);
+            Sodium = ToBounds(Sodium - 1);
+            Fat = ToBounds(Fat - 1);
         }
 
         public void Add(ref NutritionData second)
         {
             Protein = ToBounds(Protein + second.Protein);
-            Fruits = ToBounds(Fruits + second.Fruits);
+            Fat = ToBounds(Fat + second.Fat);
             Carbs = ToBounds(Carbs + second.Carbs);
-            Dairy = ToBounds(Dairy + second.Dairy);
-            Vegetables = ToBounds(Vegetables + second.Vegetables);
+            Calories = ToBounds(Calories + second.Calories);
+            Sodium = ToBounds(Sodium + second.Sodium);
         }
 
         public bool Empty()
         {
-            return Fruits == 0 && Carbs == 0 && Dairy == 0 && Vegetables == 0 && Protein == 0;
+            return Calories == 0 && Carbs == 0 && Fat == 0 && Sodium == 0 && Protein == 0;
         }
 
         public static NutritionData Full()
@@ -182,11 +188,9 @@ namespace FoodOverhaul
             return new NutritionData(MAX, MAX, MAX, MAX, MAX);
         }
 
-
         public string Format()
         {
-            return Protein + " Protein\n" + Carbs + " Carbs\n";
+            return Calories + " Calories\n" + Fat + " Fat\n" + Sodium + " Sodium\n" + Carbs + " Carbs\n" + Protein + " Protein";
         }
-
     }
 }

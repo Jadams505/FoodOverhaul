@@ -9,15 +9,10 @@ namespace FoodOverhaul.UI
 {
     public class NutritionPanel : UIElement
     {
-        public static readonly Color PROTEIN_COLOR = Colors.RarityPurple;
-        public static readonly Color FRUIT_COLOR = Colors.RarityRed;
-        public static readonly Color VEGETABLES_COLOR = Colors.RarityGreen;
-        public static readonly Color DAIRY_COLOR = Colors.RarityBlue;
-        public static readonly Color CARBS_COLOR = Colors.RarityOrange;
 
         private bool _selected;
 
-        public UIText Protein, Carbs, Vegetables, Fruits, Dairy;
+        public UIText Protein, Carbs, Calories, Sodium, Fat;
 
         public override void OnInitialize()
         {
@@ -33,31 +28,31 @@ namespace FoodOverhaul.UI
             UIText title = new("Nutrition Facts");
             Protein = new("");
             Carbs = new("");
-            Vegetables = new("");
-            Fruits = new("");
-            Dairy = new("");
+            Fat = new("");
+            Calories = new("");
+            Sodium = new("");
 
-            Fruits.VAlign = 0.2f;
-            Vegetables.VAlign = 0.4f;
-            Protein.VAlign = 0.6f;
+            Calories.VAlign = 0.2f;
+            Fat.VAlign = 0.4f;
+            Sodium.VAlign = 0.6f;
             Carbs.VAlign = 0.8f;
-            Dairy.VAlign = 1f;
+            Protein.VAlign = 1f;
 
-            Protein.TextColor = PROTEIN_COLOR;
-            Carbs.TextColor = CARBS_COLOR;
-            Vegetables.TextColor = VEGETABLES_COLOR;
-            Fruits.TextColor = FRUIT_COLOR;
-            Dairy.TextColor = DAIRY_COLOR;
+            Protein.TextColor = NutritionData.PROTEIN_COLOR;
+            Carbs.TextColor = NutritionData.CARBS_COLOR;
+            Fat.TextColor = NutritionData.FAT_COLOR;
+            Calories.TextColor = NutritionData.CALORIES_COLOR;
+            Sodium.TextColor = NutritionData.SODIUM_COLOR;
 
             UpdateNutrition(new());
 
             
             panel.Append(title);
-            panel.Append(Fruits);
-            panel.Append(Vegetables);
+            panel.Append(Fat);
+            panel.Append(Sodium);
             panel.Append(Protein);
             panel.Append(Carbs);
-            panel.Append(Dairy);
+            panel.Append(Calories);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -82,11 +77,11 @@ namespace FoodOverhaul.UI
 
         public void UpdateNutrition(NutritionData nutrition)
         {
-            Fruits.SetText(nutrition.Fruits + " Fruits");
-            Vegetables.SetText(nutrition.Vegetables + " Vegetables");
-            Protein.SetText(nutrition.Protein + " Protein");
+            Calories.SetText(nutrition.Calories + " Calories");
+            Fat.SetText(nutrition.Fat + " Fat");
+            Sodium.SetText(nutrition.Sodium + " Sodium");
             Carbs.SetText(nutrition.Carbs + " Carbs");
-            Dairy.SetText(nutrition.Dairy + " Dairy");
+            Protein.SetText(nutrition.Protein + " Protein");
         }
 
         public override void MouseDown(UIMouseEvent evt)

@@ -46,20 +46,20 @@ namespace FoodOverhaul.Items.Food
             {
                 TooltipLine tooltip = new(mod, "Nutrition Facts", "Nutrition Facts:");
                 list.Add(tooltip);
-                tooltip = new(mod, "Fruit", val.Fruits + " Fruits");
-                tooltip.overrideColor = NutritionPanel.FRUIT_COLOR;
+                tooltip = new(mod, "Calories", val.Calories + " Calories");
+                tooltip.overrideColor = NutritionData.CALORIES_COLOR;
                 list.Add(tooltip);
-                tooltip = new(mod, "Vegatable", val.Vegetables + " Vegatables");
-                tooltip.overrideColor = NutritionPanel.VEGETABLES_COLOR;
+                tooltip = new(mod, "Fat", val.Fat + " Fat");
+                tooltip.overrideColor = NutritionData.FAT_COLOR;
                 list.Add(tooltip);
-                tooltip = new(mod, "Protein", val.Protein + " Protein");
-                tooltip.overrideColor = NutritionPanel.PROTEIN_COLOR;
+                tooltip = new(mod, "Sodium", val.Sodium + " Sodium");
+                tooltip.overrideColor = NutritionData.SODIUM_COLOR;
                 list.Add(tooltip);
                 tooltip = new(mod, "Carbs", val.Carbs + " Carbs");
-                tooltip.overrideColor = NutritionPanel.CARBS_COLOR;
+                tooltip.overrideColor = NutritionData.CARBS_COLOR;
                 list.Add(tooltip);
-                tooltip = new(mod, "Dairy", val.Dairy + " Dairy");
-                tooltip.overrideColor = NutritionPanel.DAIRY_COLOR;
+                tooltip = new(mod, "Protein", val.Protein + " Protein");
+                tooltip.overrideColor = NutritionData.PROTEIN_COLOR;
                 list.Add(tooltip);
             }
             return list;
