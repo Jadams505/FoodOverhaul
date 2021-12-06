@@ -64,7 +64,7 @@ namespace FoodOverhaul.Nutrition
             set.Add(VanillaEntry(ItemID.Starfruit, calories: 30, fat: 0, sodium: 2, carbs: 7, protein: 1));
             set.Add(VanillaEntry(ItemID.ApplePie, calories: 1880, fat: 60, sodium: 1200, carbs: 250, protein: 14));
             set.Add(VanillaEntry(ItemID.Bacon, calories: 370, fat: 30, sodium: 1200, carbs: 1, protein: 26));
-            set.Add(VanillaEntry(ItemID.Starfruit, calories: 965, fat: 34, sodium: 400, carbs: 150, protein: 12));
+            set.Add(VanillaEntry(ItemID.BananaSplit, calories: 965, fat: 34, sodium: 400, carbs: 150, protein: 12));
             set.Add(VanillaEntry(ItemID.BBQRibs, calories: 460, fat: 20, sodium: 1100, carbs: 40, protein: 21));
             set.Add(VanillaEntry(ItemID.Burger, calories: 600, fat: 33, sodium: 900, carbs: 47, protein: 31));
             set.Add(VanillaEntry(ItemID.MilkCarton, calories: 140, fat: 8, sodium: 90, carbs: 11, protein: 8));
@@ -72,8 +72,10 @@ namespace FoodOverhaul.Nutrition
             set.Add(VanillaEntry(ItemID.ChocolateChipCookie, calories: 220, fat: 11, sodium: 140, carbs: 29, protein: 2));
             set.Add(VanillaEntry(ItemID.CoffeeCup, calories: 80, fat: 1, sodium: 32, carbs: 19, protein: 0));
             set.Add(VanillaEntry(ItemID.CreamSoda, calories: 180, fat: 0, sodium: 60, carbs: 47, protein: 0));
-            set.Add(VanillaEntry(ItemID.Starfruit, calories: 90, fat: 7, sodium: 95, carbs: 0, protein: 6));
-            set.Add(VanillaEntry(ItemID.Starfruit, calories: 220, fat: 11, sodium: 134, carbs: 30, protein: 3));
+            set.Add(VanillaEntry(ItemID.FriedEgg, calories: 90, fat: 7, sodium: 95, carbs: 0, protein: 6));
+            set.Add(VanillaEntry(ItemID.Fries, calories: 220, fat: 11, sodium: 134, carbs: 30, protein: 3));
+            set.Add(VanillaEntry(ItemID.Grapes, calories: 100, fat: 9, sodium: 3, carbs: 27, protein: 1));
+            set.Add(VanillaEntry(ItemID.Hotdog, calories: 350, fat: 16, sodium: 630, carbs: 34, protein: 16));
             set.Add(VanillaEntry(ItemID.IceCream, calories: 300, fat: 15, sodium: 103, carbs: 38, protein: 5));
             set.Add(VanillaEntry(ItemID.Milkshake, calories: 400, fat: 12, sodium: 140, carbs: 74, protein: 7));
             set.Add(VanillaEntry(ItemID.Nachos, calories: 450, fat: 28, sodium: 413, carbs: 46, protein: 6));

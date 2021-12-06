@@ -6,6 +6,7 @@ using Terraria.ID;
 using System.ComponentModel;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
+using FoodOverhaul.Util;
 
 namespace FoodOverhaul
 {
@@ -13,13 +14,17 @@ namespace FoodOverhaul
     {
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
+        
         public HashSet<ItemNutritionPair> NutritionFacts = DefaultNutritionValues.RealisticDefault();
+
+        [DefaultValue(8 * 60)] // 8 seconds give or take
+        [Range(1, 216000)]
+        public int TickRate;
 
         public static NutritionConfig Get()
         {
             return ModContent.GetInstance<NutritionConfig>();
         }
-
     }
 
     [TypeConverter(typeof(ToFromStringConverter<ItemNutritionPair>))]
@@ -77,7 +82,7 @@ namespace FoodOverhaul
 
     public class NutritionData
     {
-        public const int MAX = 3000;
+        public const int MAX = 9999;
 
         public static readonly Color CALORIES_COLOR = Colors.RarityYellow;
         public static readonly Color FAT_COLOR = Colors.RarityRed;
@@ -162,11 +167,6 @@ namespace FoodOverhaul
         public bool Empty()
         {
             return Calories == 0 && Carbs == 0 && Fat == 0 && Sodium == 0 && Protein == 0;
-        }
-
-        public static NutritionData Full()
-        {
-            return new NutritionData(MAX, MAX, MAX, MAX, MAX);
         }
 
         public string Format()

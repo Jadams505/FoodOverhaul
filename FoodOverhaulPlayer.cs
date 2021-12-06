@@ -6,6 +6,7 @@ using Terraria.ID;
 using FoodOverhaul.Util;
 using Terraria.GameInput;
 using FoodOverhaul.UI;
+using FoodOverhaul.Nutrition;
 
 namespace FoodOverhaul
 {
@@ -14,7 +15,7 @@ namespace FoodOverhaul
 
         public int Tick;
 
-        public NutritionData nutrition = NutritionData.Full();
+        public NutritionData nutrition = Initial();
 
         public void AddNutrition(NutritionData other)
         {
@@ -22,7 +23,7 @@ namespace FoodOverhaul
         }
         public override void PreUpdateBuffs()
         {
-            if(nutrition.Protein == NutritionData.MAX)
+            if(HealthinessHelper.IsHealthy(nutrition))
             {
                 Player.AddBuff(BuffID.WellFed, TimeUtil.Minutes(10));
             }
@@ -30,7 +31,7 @@ namespace FoodOverhaul
 
         public override void PostUpdateBuffs()
         {
-            if(nutrition.Protein != NutritionData.MAX)
+            if(!HealthinessHelper.IsHealthy(nutrition))
             {
                 Player.ClearBuff(BuffID.WellFed);
                 Player.ClearBuff(BuffID.WellFed2);
@@ -41,7 +42,7 @@ namespace FoodOverhaul
         public override void PostUpdate()
         {
             Tick++;
-            if(Tick % TimeUtil.Seconds(2) == 0)
+            if(Tick % NutritionConfig.Get().TickRate == 0)
             {
                 nutrition.Decrement();
                 NutritionUI.UpdateNutrition(nutrition);
@@ -50,7 +51,7 @@ namespace FoodOverhaul
 
         public override void LoadData(TagCompound tag)
         {
-            nutrition = NutritionData.Full();
+            nutrition = Initial();
             try
             {
                 nutrition.Protein = tag.GetInt("protein");
@@ -93,6 +94,11 @@ namespace FoodOverhaul
             }
             return null;
             
+        }
+
+        public static NutritionData Initial()
+        {
+            return new NutritionData(calories: 2000, fat: 75, sodium: 2250, carbs: 275, protein: 50);
         }
 
     }
