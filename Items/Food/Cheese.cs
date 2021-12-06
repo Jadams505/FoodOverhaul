@@ -8,11 +8,11 @@ namespace FoodOverhaul.Items.Food
 	{
 		public Cheese()
         {
-			nutrition.Calories = 0;
-			nutrition.Fat = 40;
-			nutrition.Carbs = 10;
-			nutrition.Protein = 20;
-			nutrition.Sodium = 0;
+			nutrition.Calories = 110;
+			nutrition.Fat = 9;
+			nutrition.Sodium = 180;
+			nutrition.Carbs = 2;
+			nutrition.Protein = 7;
         }
 
 		public override void SetDefaults()

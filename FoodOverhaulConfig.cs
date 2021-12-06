@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Terraria.ModLoader.Config;
-using FoodOverhaul.Items.Food;
+using FoodOverhaul.Nutrition;
 using Terraria.ID;
 using System.ComponentModel;
 using Terraria.ModLoader;
@@ -13,41 +13,13 @@ namespace FoodOverhaul
     {
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
-        public HashSet<ItemNutritionPair> NutritionFacts = Defaults.Default();
-
+        public HashSet<ItemNutritionPair> NutritionFacts = DefaultNutritionValues.RealisticDefault();
 
         public static NutritionConfig Get()
         {
             return ModContent.GetInstance<NutritionConfig>();
         }
 
-    }
-
-    public struct Defaults
-    {
-        public static HashSet<ItemNutritionPair> Default()
-        {
-            HashSet<ItemNutritionPair> set = new();
-
-            //Vanilla Foods
-
-            set.Add(VanillaEntry(ItemID.CookedMarshmallow, 0, 5, 0, 0, 0));
-            set.Add(VanillaEntry(ItemID.AppleJuice, 0, 5, 30, 0, 0));
-            set.Add(VanillaEntry(ItemID.BloodyMoscato, 3, 5, 40, 20, 0));
-
-            //Modded Foods
-
-            foreach (ModFood food in ModContent.GetContent<ModFood>())
-            {
-                set.Add(new ItemNutritionPair(food.Type, food.GetNutrition()));
-            }
-            return set;
-        }
-
-        private static ItemNutritionPair VanillaEntry(int id, int protein, int carbs, int fruit, int vegetables, int dairy)
-        {
-            return new ItemNutritionPair(id, new NutritionData(protein, carbs, fruit, vegetables, dairy));
-        }
     }
 
     [TypeConverter(typeof(ToFromStringConverter<ItemNutritionPair>))]
@@ -105,7 +77,7 @@ namespace FoodOverhaul
 
     public class NutritionData
     {
-        public const int MAX = 100;
+        public const int MAX = 3000;
 
         public static readonly Color CALORIES_COLOR = Colors.RarityYellow;
         public static readonly Color FAT_COLOR = Colors.RarityRed;
@@ -113,14 +85,23 @@ namespace FoodOverhaul
         public static readonly Color CARBS_COLOR = Colors.RarityOrange;
         public static readonly Color PROTEIN_COLOR = Colors.RarityPurple;
         
+        [Range(0,MAX)]
         [BackgroundColor(255, 255, 10)]
-        public int Calories;    
+        public int Calories;
+        [Label("Fat (g)")]
+        [Range(0, MAX)]
         [BackgroundColor(255, 150, 150)]
         public int Fat;
+        [Label("Sodium (mg)")]
+        [Range(0, MAX)]
         [BackgroundColor(150, 150, 255)]
         public int Sodium;
+        [Label("Carbohydrates (g)")]
+        [Range(0, MAX)]
         [BackgroundColor(255, 200, 150)]
         public int Carbs;
+        [Label("Protein (g)")]
+        [Range(0, MAX)]
         [BackgroundColor(210, 160, 255)]
         public int Protein;
         
