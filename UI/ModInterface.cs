@@ -16,23 +16,27 @@ namespace FoodOverhaul.UI
             if (!Main.dedServ)
             {
                 NutritionUI.Load();
+                NutritionBubblesUI.Load();
             }
         }
 
         public override void Unload()
         {
             NutritionUI.Unload();
+            NutritionBubblesUI.Unload();
         }
 
         public override void UpdateUI(GameTime gameTime)
         {
             _lastUpdate = gameTime;
             NutritionUI.Update(gameTime);
+            NutritionBubblesUI.Update(gameTime);
         }
 
         private static bool DrawGUI()
         {
             NutritionUI.DrawGUI(_lastUpdate);
+            NutritionBubblesUI.DrawGUI(_lastUpdate);
             return true;
         }
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)

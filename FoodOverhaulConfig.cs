@@ -7,10 +7,32 @@ using System.ComponentModel;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using FoodOverhaul.Util;
+using FoodOverhaul.UI;
 
 namespace FoodOverhaul
 {
-    public class NutritionConfig : ModConfig
+    public class NutritionClientConfig : ModConfig
+    {
+        public override ConfigScope Mode => ConfigScope.ClientSide;
+
+        [DefaultValue(1000)]
+        [Range(0, 2000)]
+        public int UIPosX;
+        [DefaultValue(80)]
+        [Range(0, 2000)]
+        public int UIPosY;
+
+        public override void OnChanged()
+        {
+            NutritionBubblesUI.UpdatePanel(UIPosX, UIPosY);
+        }
+
+        public static NutritionClientConfig Get()
+        {
+            return ModContent.GetInstance<NutritionClientConfig>();
+        }
+    }
+    public class NutritionServerConfig : ModConfig
     {
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
@@ -21,9 +43,9 @@ namespace FoodOverhaul
         [Range(1, 216000)]
         public int TickRate;
 
-        public static NutritionConfig Get()
+        public static NutritionServerConfig Get()
         {
-            return ModContent.GetInstance<NutritionConfig>();
+            return ModContent.GetInstance<NutritionServerConfig>();
         }
     }
 

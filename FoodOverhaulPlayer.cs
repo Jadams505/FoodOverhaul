@@ -42,10 +42,11 @@ namespace FoodOverhaul
         public override void PostUpdate()
         {
             Tick++;
-            if(Tick % NutritionConfig.Get().TickRate == 0)
+            if(Tick % NutritionServerConfig.Get().TickRate == 0)
             {
                 nutrition.Decrement();
                 NutritionUI.UpdateNutrition(nutrition);
+                NutritionBubblesUI.UpdateNutrition(nutrition);
             }
         }
 
@@ -78,9 +79,20 @@ namespace FoodOverhaul
         public override void ProcessTriggers(TriggersSet triggersSet)
         {
             if (KeybindManager.toggleNutrition.JustPressed)
+            {  
+                NutritionBubblesUI.UpdateNutrition(nutrition);
+                NutritionBubblesUI.Toggle();
+            }
+            if (KeybindManager.toggleStats.JustPressed)
             {
                 NutritionUI.Toggle();
             }
+        }
+
+        public override void OnRespawn(Player player)
+        {
+            player.GetModPlayer<FoodOverhaulPlayer>().nutrition = Initial(); // on death reset nutrition
+            NutritionBubblesUI.UpdateNutrition(nutrition);
         }
 
         public static FoodOverhaulPlayer GetModPlayer()
