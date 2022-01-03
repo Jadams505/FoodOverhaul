@@ -7,10 +7,46 @@ using System.ComponentModel;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using FoodOverhaul.Util;
+using FoodOverhaul.UI;
 
 namespace FoodOverhaul
 {
-    public class NutritionConfig : ModConfig
+    public class NutritionClientConfig : ModConfig
+    {
+        public override ConfigScope Mode => ConfigScope.ClientSide;
+
+        [DefaultValue(1000)]
+        [Range(0, 2000)]
+        public int UIPosX;
+        [DefaultValue(80)]
+        [Range(0, 2000)]
+        public int UIPosY;
+        [DefaultValue(true)]
+        public bool UIPositionLocked;
+        [DefaultValue(true)]
+        public bool DisplayUIHorizontally;
+        [DefaultValue(true)]
+        public bool DisplayPercents;
+        [DefaultValue(NutritionBubble.Direction.BOTTOM)]
+        [DrawTicks]
+        public NutritionBubble.Direction LabelTextPosition;
+        
+
+        public override void OnChanged()
+        {
+            NutritionBubblesUI.UpdatePanel(UIPosX, UIPosY);
+            NutritionBubblesUI.LockPosition(UIPositionLocked);
+            NutritionBubblesUI.SwitchOrientation(DisplayUIHorizontally);
+            NutritionBubblesUI.AlignBubbles();
+            NutritionBubblesUI.ShowPercent(DisplayPercents);
+        }
+
+        public static NutritionClientConfig Get()
+        {
+            return ModContent.GetInstance<NutritionClientConfig>();
+        }
+    }
+    public class NutritionServerConfig : ModConfig
     {
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
@@ -21,9 +57,9 @@ namespace FoodOverhaul
         [Range(1, 216000)]
         public int TickRate;
 
-        public static NutritionConfig Get()
+        public static NutritionServerConfig Get()
         {
-            return ModContent.GetInstance<NutritionConfig>();
+            return ModContent.GetInstance<NutritionServerConfig>();
         }
     }
 

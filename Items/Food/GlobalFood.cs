@@ -24,10 +24,11 @@ namespace FoodOverhaul.Items.Food
             try
             {
                 modPlayer = player.GetModPlayer<FoodOverhaulPlayer>();
-                bool found = ModContent.GetInstance<NutritionConfig>().NutritionFacts.TryGetValue(new ItemNutritionPair(item.type, new()), out ItemNutritionPair pair);
+                bool found = NutritionServerConfig.Get().NutritionFacts.TryGetValue(new ItemNutritionPair(item.type, new()), out ItemNutritionPair pair);
                 if (found)
                 {
                     modPlayer.AddNutrition(pair.Nutrition);
+                    NutritionBubblesUI.UpdateNutrition(modPlayer.nutrition);
                 }
 
             }
@@ -40,7 +41,7 @@ namespace FoodOverhaul.Items.Food
         public static List<TooltipLine> GetNutritionTooltip(Mod mod, Item item)
         {
             List<TooltipLine> list = new();
-            bool found = ModContent.GetInstance<NutritionConfig>().NutritionFacts.TryGetValue(new ItemNutritionPair(item.type, new()), out ItemNutritionPair pair);
+            bool found = NutritionServerConfig.Get().NutritionFacts.TryGetValue(new ItemNutritionPair(item.type, new()), out ItemNutritionPair pair);
             NutritionData val = found ? pair.Nutrition : new();
             if (!val.Empty())
             {
