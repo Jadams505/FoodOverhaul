@@ -30,10 +30,16 @@ namespace FoodOverhaul.UI
         private int _maxValue;
         private string _name;
         public Color Color { get; set; }
+        public enum Direction {LEFT, RIGHT, TOP, BOTTOM};
+        public Direction TextAlignment { get; set; }
+        public bool ShowPercent {get; set;}
+
         public NutritionBubble(string name, Color color, int initialValue, int maxValue)
         {
             _name = name;
             Color = color;
+            TextAlignment = Direction.BOTTOM;
+            ShowPercent = true;
             _maxValue = maxValue;
             _value = initialValue;
             Width.Set(BORDER_SIZE, 0);
@@ -50,20 +56,11 @@ namespace FoodOverhaul.UI
             DrawBackground(spriteBatch, dim);
             DrawBorder(spriteBatch, dim);
             DrawFill(spriteBatch, dim);
-            DrawText(spriteBatch, dim);
+            DrawValueInBubble(spriteBatch, dim);
 
             if (IsMouseHovering)
             {
-                /*
-                Rectangle bounds = base.Parent.GetDimensions().ToRectangle();
-                bounds.Y = 0;
-                bounds.Height = Main.screenHeight;
-                UICommon.DrawHoverStringInBounds(spriteBatch, _name, bounds);
-                */
-                Vector2 textSize = _font.MeasureString(_name) * 0.75f;
-                float bubbleCenter = dim.X + BORDER_SIZE / 2;
-                DynamicSpriteFontExtensionMethods.DrawString(spriteBatch, _font, _name, 
-                    new Vector2(bubbleCenter - textSize.X / 2, dim.Y + BORDER_SIZE), Color.White, 0, new Vector2(), 0.75f, SpriteEffects.None, 0);
+                DrawLabel(spriteBatch, dim);
             }
         }
 
@@ -79,11 +76,56 @@ namespace FoodOverhaul.UI
         {
             spriteBatch.Draw(_background.Value, new Vector2(dim.X, dim.Y), new Rectangle(0, 0, BORDER_SIZE, BORDER_SIZE), Color.White);
         }
-        private void DrawText(SpriteBatch spriteBatch, CalculatedStyle dim)
+        private void DrawPercent(SpriteBatch spriteBatch, CalculatedStyle dim)
         {
             Vector2 textSize = _font.MeasureString(PercentToShow() + "") * 0.75f;
             DynamicSpriteFontExtensionMethods.DrawString(spriteBatch, _font, PercentToShow() + "", new Vector2(dim.X + (BORDER_SIZE / 2) - (textSize.X / 2), dim.Y + BORDER_SIZE / 2 - textSize.Y / 2), Color.White, 0, new Vector2(), 0.75f, SpriteEffects.None, 0);
         }
+        private void DrawValue(SpriteBatch spriteBatch, CalculatedStyle dim)
+        {
+            Vector2 textSize = _font.MeasureString(_value + "") * 0.6f;
+            DynamicSpriteFontExtensionMethods.DrawString(spriteBatch, _font, _value + "", new Vector2(dim.X + (BORDER_SIZE / 2) - (textSize.X / 2), dim.Y + BORDER_SIZE / 2 - textSize.Y / 2), Color.White, 0, new Vector2(), 0.6f, SpriteEffects.None, 0);
+        }
+        private void DrawValueInBubble(SpriteBatch spriteBatch, CalculatedStyle dim)
+        {
+            if (ShowPercent)
+            {
+                DrawPercent(spriteBatch, dim);
+            }
+            else
+            {
+                DrawValue(spriteBatch, dim);
+            }
+        }
+        private void DrawLabel(SpriteBatch spriteBatch, CalculatedStyle dim)
+        {
+            Vector2 textSize = _font.MeasureString(_name) * 0.75f;
+            Vector2 bubbleCenter = new Vector2(dim.X + BORDER_SIZE / 2, dim.Y + BORDER_SIZE / 2);
+            switch (TextAlignment)
+            {
+                case Direction.BOTTOM:
+                    DynamicSpriteFontExtensionMethods.DrawString(spriteBatch, _font, _name,
+                        new Vector2(bubbleCenter.X - textSize.X / 2, dim.Y + BORDER_SIZE),
+                        Color.White, 0, new Vector2(), 0.75f, SpriteEffects.None, 0);
+                    break;
+                case Direction.TOP:
+                    DynamicSpriteFontExtensionMethods.DrawString(spriteBatch, _font, _name,
+                        new Vector2(bubbleCenter.X - textSize.X / 2, dim.Y - textSize.Y),
+                        Color.White, 0, new Vector2(), 0.75f, SpriteEffects.None, 0);
+                    break;
+                case Direction.RIGHT:
+                    DynamicSpriteFontExtensionMethods.DrawString(spriteBatch, _font, _name,
+                        new Vector2(dim.X + BORDER_SIZE, bubbleCenter.Y - textSize.Y / 2),
+                        Color.White, 0, new Vector2(), 0.75f, SpriteEffects.None, 0);
+                    break;
+                case Direction.LEFT:
+                    DynamicSpriteFontExtensionMethods.DrawString(spriteBatch, _font, _name,
+                        new Vector2(dim.X - textSize.X, bubbleCenter.Y - textSize.Y / 2),
+                        Color.White, 0, new Vector2(), 0.75f, SpriteEffects.None, 0);
+                    break;
+            }
+        }
+        
         private float FillPercent()
         {
             return (float)_value / _maxValue;

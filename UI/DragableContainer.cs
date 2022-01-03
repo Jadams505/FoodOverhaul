@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ReLogic.Graphics;
 using Terraria.GameInput;
+using System;
 
 namespace FoodOverhaul.UI
 {
@@ -11,10 +12,12 @@ namespace FoodOverhaul.UI
     {
 
         private bool _selected;
+        private bool _locked;
 
         public override void OnInitialize()
         {
             _selected = false;
+            _locked = false;
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
@@ -26,10 +29,15 @@ namespace FoodOverhaul.UI
             {
                 Main.LocalPlayer.mouseInterface = true;
             }
-            if (_selected)
+            if (_selected && !_locked)
             {
-                Left.Set(this.Left.Pixels + (Main.mouseX - Main.lastMouseX), 0);
-                Top.Set(this.Top.Pixels + (Main.mouseY - Main.lastMouseY), 0);
+                int deltaX = Main.mouseX - Main.lastMouseX, deltaY = Main.mouseY - Main.lastMouseY;
+                if(Main.lastMouseX > 0 && Main.lastMouseX < Main.screenWidth && Main.lastMouseY > 0 && Main.lastMouseY < Main.screenHeight)
+                {
+                    Left.Set(Left.Pixels + deltaX, 0);
+                    Top.Set(Top.Pixels + deltaY, 0);
+                }
+                
             }
             base.Update(gameTime);
         }
@@ -44,6 +52,22 @@ namespace FoodOverhaul.UI
             _selected = false;
         }
 
+        public void Lock(bool lockPosition)
+        {
+            if (lockPosition)
+            {
+                _locked = true;
+            }
+            else
+            {
+                _locked = false;
+            }
+        }
+
+        public void Unselect()
+        {
+            _selected = false;
+        }
     }
 
     

@@ -19,34 +19,23 @@ namespace FoodOverhaul.UI
         private static NutritionBubble _calories, _fat, _sodium, _carbs, _protein;
         private static UIState _state;
 
+        public static bool Horizontal { get; set; }
         public static bool Enabled { get; private set; }
 
         public static void Initialize()
         {
             Enabled = false;
+            Horizontal = true;
             _interface = new();
 
-            
-
             _calories = new NutritionBubble("Calories", NutritionData.CALORIES_COLOR, 0, 3000);
-            _calories.HAlign = 0.1f;
-
             _fat = new NutritionBubble("Fat", NutritionData.FAT_COLOR, 0, 90);
-            _fat.HAlign = 0.3f;
-
             _sodium = new NutritionBubble("Sodium", NutritionData.SODIUM_COLOR, 0, 3000);
-            _sodium.HAlign = 0.5f;
-
             _carbs = new NutritionBubble("Carbs", NutritionData.CARBS_COLOR, 0, 400);
-            _carbs.HAlign = 0.7f;
-
             _protein = new NutritionBubble("Protein", NutritionData.PROTEIN_COLOR, 0, 75);
-            _protein.HAlign = 0.9f;
-
             _panel = new DragableContainer();
-            _panel.Width.Set(_calories.Width.Pixels * 6, 0);
-            _panel.Height.Set(_calories.Width.Pixels, 0);
 
+            SwitchOrientation(Horizontal);
             
             _panel.Append(_calories);
             _panel.Append(_fat);
@@ -73,6 +62,9 @@ namespace FoodOverhaul.UI
             {
                 _interface.Update(time);
                 UpdateConfig();
+                LockPosition(NutritionClientConfig.Get().UIPositionLocked);
+                SwitchOrientation(NutritionClientConfig.Get().DisplayUIHorizontally);
+                ShowPercent(NutritionClientConfig.Get().DisplayPercents);
             }
         }
 
@@ -92,6 +84,58 @@ namespace FoodOverhaul.UI
             {
                 _panel.Left.Set(x, 0);
                 _panel.Top.Set(y, 0);
+            }
+        }
+
+        public static void LockPosition(bool lockPostion)
+        {
+            if(_panel != null)
+            {
+                _panel.Lock(lockPostion);
+            }
+        }
+
+        public static void SwitchOrientation(bool horizontal)
+        {
+            Horizontal = horizontal;
+            if(_panel == null)
+            {
+                return;
+            }
+            AlignBubbles();
+            if (Horizontal)
+            {
+                _panel.Width.Set(_calories.Width.Pixels * 6, 0);
+                _panel.Height.Set(_calories.Width.Pixels, 0);
+            }
+            else
+            {
+                _panel.Height.Set(_calories.Width.Pixels * 6, 0);
+                _panel.Width.Set(_calories.Width.Pixels, 0);
+            }
+        }
+
+        public static void ShowPercent(bool showPercent)
+        {
+            if(_carbs != null)
+            {
+                _carbs.ShowPercent = showPercent;
+            }
+            if(_calories != null)
+            {
+                _calories.ShowPercent = showPercent;
+            }
+            if(_fat != null)
+            {
+                _fat.ShowPercent = showPercent;
+            }
+            if(_protein != null)
+            {
+                _protein.ShowPercent = showPercent;
+            }
+            if(_sodium != null)
+            {
+                _sodium.ShowPercent = showPercent;
             }
         }
 
@@ -145,7 +189,33 @@ namespace FoodOverhaul.UI
 
         private static void Hide()
         {
+            _panel.Unselect();
             _interface?.SetState(null);
+        }
+
+        public static void AlignBubbles()
+        {
+            ApplyOrientation(ref _calories, 0.1f);
+            ApplyOrientation(ref _fat, 0.3f);
+            ApplyOrientation(ref _sodium, 0.5f);
+            ApplyOrientation(ref _carbs, 0.7f);
+            ApplyOrientation(ref _protein, 0.9f);
+        }
+        private static void ApplyOrientation(ref NutritionBubble element, float value)
+        {
+            if(element == null)
+            {
+                return;
+            }
+            element.TextAlignment = NutritionClientConfig.Get().LabelTextPosition;
+            if (Horizontal)
+            {
+                element.HAlign = value;
+            }
+            else
+            {
+                element.VAlign = value;
+            }
         }
     }
 }

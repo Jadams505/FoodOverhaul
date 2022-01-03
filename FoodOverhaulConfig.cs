@@ -21,10 +21,24 @@ namespace FoodOverhaul
         [DefaultValue(80)]
         [Range(0, 2000)]
         public int UIPosY;
+        [DefaultValue(true)]
+        public bool UIPositionLocked;
+        [DefaultValue(true)]
+        public bool DisplayUIHorizontally;
+        [DefaultValue(true)]
+        public bool DisplayPercents;
+        [DefaultValue(NutritionBubble.Direction.BOTTOM)]
+        [DrawTicks]
+        public NutritionBubble.Direction LabelTextPosition;
+        
 
         public override void OnChanged()
         {
             NutritionBubblesUI.UpdatePanel(UIPosX, UIPosY);
+            NutritionBubblesUI.LockPosition(UIPositionLocked);
+            NutritionBubblesUI.SwitchOrientation(DisplayUIHorizontally);
+            NutritionBubblesUI.AlignBubbles();
+            NutritionBubblesUI.ShowPercent(DisplayPercents);
         }
 
         public static NutritionClientConfig Get()
