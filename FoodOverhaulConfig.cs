@@ -178,27 +178,6 @@ namespace FoodOverhaul
         {
             return new { Protein, Carbs, Fat, Sodium, Calories }.GetHashCode();
         }
-        private static int ToBounds(int num)
-        {
-            return Math.Clamp(num, 0, MAX);
-        }
-        public void Decrement()
-        {
-            Protein = ToBounds(Protein - 1);
-            Calories = ToBounds(Calories - 1);
-            Carbs = ToBounds(Carbs - 1);
-            Sodium = ToBounds(Sodium - 1);
-            Fat = ToBounds(Fat - 1);
-        }
-
-        public void Add(ref NutritionData second)
-        {
-            Protein = ToBounds(Protein + second.Protein);
-            Fat = ToBounds(Fat + second.Fat);
-            Carbs = ToBounds(Carbs + second.Carbs);
-            Calories = ToBounds(Calories + second.Calories);
-            Sodium = ToBounds(Sodium + second.Sodium);
-        }
 
         public bool Empty()
         {

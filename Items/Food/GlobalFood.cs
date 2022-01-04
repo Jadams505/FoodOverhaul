@@ -28,7 +28,7 @@ namespace FoodOverhaul.Items.Food
                 if (found)
                 {
                     modPlayer.AddNutrition(pair.Nutrition);
-                    NutritionBubblesUI.UpdateNutrition(modPlayer.nutrition);
+                    NutritionBubblesUI.UpdateNutrition(modPlayer.PlayerNutrition);
                 }
 
             }

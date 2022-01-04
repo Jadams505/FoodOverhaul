@@ -1,13 +1,7 @@
 ﻿using Terraria.UI;
-using Terraria.ModLoader.UI;
 using Microsoft.Xna.Framework;
-using Terraria.GameContent.UI.Elements;
-using Terraria.GameContent;
-using Terraria.ID;
 using Terraria;
-using Terraria.ModLoader;
-using Microsoft.Xna.Framework.Graphics;
-using Terraria.Localization;
+using FoodOverhaul.Nutrition;
 
 namespace FoodOverhaul.UI
 {
@@ -28,11 +22,11 @@ namespace FoodOverhaul.UI
             Horizontal = true;
             _interface = new();
 
-            _calories = new NutritionBubble("Calories", NutritionData.CALORIES_COLOR, 0, 3000);
-            _fat = new NutritionBubble("Fat", NutritionData.FAT_COLOR, 0, 90);
-            _sodium = new NutritionBubble("Sodium", NutritionData.SODIUM_COLOR, 0, 3000);
-            _carbs = new NutritionBubble("Carbs", NutritionData.CARBS_COLOR, 0, 400);
-            _protein = new NutritionBubble("Protein", NutritionData.PROTEIN_COLOR, 0, 75);
+            _calories = new NutritionBubble("Calories", NutritionData.CALORIES_COLOR, 0, HealthinessHelper.TARGET_CALORIES);
+            _fat = new NutritionBubble("Fat", NutritionData.FAT_COLOR, 0, HealthinessHelper.TARGET_FAT);
+            _sodium = new NutritionBubble("Sodium", NutritionData.SODIUM_COLOR, 0, HealthinessHelper.TARGET_SODIUM);
+            _carbs = new NutritionBubble("Carbs", NutritionData.CARBS_COLOR, 0, HealthinessHelper.TARGET_CARBS);
+            _protein = new NutritionBubble("Protein", NutritionData.PROTEIN_COLOR, 0, HealthinessHelper.TARGET_PROTEIN);
             _panel = new DragableContainer();
 
             SwitchOrientation(Horizontal);
@@ -47,7 +41,7 @@ namespace FoodOverhaul.UI
             _state.Append(_panel);
         }
 
-        public static void UpdateNutrition(NutritionData data)
+        public static void UpdateNutrition(PlayerNutritionData data)
         {
             _calories.UpdateValue(data.Calories);
             _fat.UpdateValue(data.Fat);

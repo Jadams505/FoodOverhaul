@@ -15,15 +15,20 @@ namespace FoodOverhaul
 
         public int Tick;
 
-        public NutritionData nutrition = Initial();
+        public PlayerNutritionData PlayerNutrition;
 
-        public void AddNutrition(NutritionData other)
+        public FoodOverhaulPlayer()
         {
-            nutrition.Add(ref other);
+            PlayerNutrition = Initial();
+        }
+
+        public void AddNutrition(NutritionData data)
+        {
+            PlayerNutrition.Add(ref data);
         }
         public override void PreUpdateBuffs()
         {
-            if(HealthinessHelper.IsHealthy(nutrition))
+            if(HealthinessHelper.IsHealthy(PlayerNutrition))
             {
                 Player.AddBuff(BuffID.WellFed, TimeUtil.Minutes(10));
             }
@@ -31,7 +36,7 @@ namespace FoodOverhaul
 
         public override void PostUpdateBuffs()
         {
-            if(!HealthinessHelper.IsHealthy(nutrition))
+            if(!HealthinessHelper.IsHealthy(PlayerNutrition))
             {
                 Player.ClearBuff(BuffID.WellFed);
                 Player.ClearBuff(BuffID.WellFed2);
@@ -44,22 +49,21 @@ namespace FoodOverhaul
             Tick++;
             if(Tick % NutritionServerConfig.Get().TickRate == 0)
             {
-                nutrition.Decrement();
-                NutritionUI.UpdateNutrition(nutrition);
-                NutritionBubblesUI.UpdateNutrition(nutrition);
+                PlayerNutrition.Decrement();
+                NutritionBubblesUI.UpdateNutrition(PlayerNutrition);
             }
         }
 
         public override void LoadData(TagCompound tag)
         {
-            nutrition = Initial();
+            PlayerNutrition = Initial();
             try
             {
-                nutrition.Protein = tag.GetInt("protein");
-                nutrition.Calories = tag.GetInt("calories");
-                nutrition.Sodium = tag.GetInt("sodium");
-                nutrition.Carbs = tag.GetInt("carbs");
-                nutrition.Fat = tag.GetInt("fat");
+                PlayerNutrition.Protein = tag.GetFloat("protein");
+                PlayerNutrition.Calories = tag.GetFloat("calories");
+                PlayerNutrition.Sodium = tag.GetFloat("sodium");
+                PlayerNutrition.Carbs = tag.GetFloat("carbs");
+                PlayerNutrition.Fat = tag.GetFloat("fat");
             }
             catch (Exception)
             {
@@ -68,11 +72,11 @@ namespace FoodOverhaul
 
         public override void SaveData(TagCompound tag)
         {
-            tag.Add("protein", nutrition.Protein);
-            tag.Add("fat", nutrition.Fat);
-            tag.Add("calories", nutrition.Calories);
-            tag.Add("carbs", nutrition.Carbs);
-            tag.Add("sodium", nutrition.Sodium);
+            tag.Add("protein", PlayerNutrition.Protein);
+            tag.Add("fat", PlayerNutrition.Fat);
+            tag.Add("calories", PlayerNutrition.Calories);
+            tag.Add("carbs", PlayerNutrition.Carbs);
+            tag.Add("sodium", PlayerNutrition.Sodium);
             base.SaveData(tag);
         }
 
@@ -80,19 +84,20 @@ namespace FoodOverhaul
         {
             if (KeybindManager.toggleNutrition.JustPressed)
             {  
-                NutritionBubblesUI.UpdateNutrition(nutrition);
+                NutritionBubblesUI.UpdateNutrition(PlayerNutrition);
                 NutritionBubblesUI.Toggle();
-            }
-            if (KeybindManager.toggleStats.JustPressed)
-            {
-                NutritionUI.Toggle();
             }
         }
 
         public override void OnRespawn(Player player)
         {
-            player.GetModPlayer<FoodOverhaulPlayer>().nutrition = Initial(); // on death reset nutrition
-            NutritionBubblesUI.UpdateNutrition(nutrition);
+            player.GetModPlayer<FoodOverhaulPlayer>().PlayerNutrition = Initial(); // on death reset nutrition
+            NutritionBubblesUI.UpdateNutrition(PlayerNutrition);
+        }
+
+        public override void PlayerConnect(Player player)
+        {
+            NutritionBubblesUI.UpdateNutrition(PlayerNutrition);
         }
 
         public static FoodOverhaulPlayer GetModPlayer()
@@ -107,10 +112,11 @@ namespace FoodOverhaul
             return null;
             
         }
-
-        public static NutritionData Initial()
+        public static PlayerNutritionData Initial()
         {
-            return new NutritionData(calories: 2000, fat: 75, sodium: 2250, carbs: 275, protein: 50);
+            return new PlayerNutritionData(new NutritionData(calories: HealthinessHelper.TARGET_CALORIES,
+                fat: HealthinessHelper.TARGET_FAT, sodium: HealthinessHelper.TARGET_SODIUM, carbs: HealthinessHelper.TARGET_CARBS,
+                protein: HealthinessHelper.TARGET_PROTEIN));
         }
 
     }

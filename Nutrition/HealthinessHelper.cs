@@ -1,7 +1,7 @@
 ﻿
 namespace FoodOverhaul.Nutrition
 {
-    public class HealthinessHelper
+    public static class HealthinessHelper
     {
         public enum Status
         {
@@ -10,34 +10,41 @@ namespace FoodOverhaul.Nutrition
             HEALTHY,
             GETTING_LOW,
             TOO_LOW
-        } 
+        }
+        public const int TARGET_CALORIES = 2000;
+        public const int TARGET_FAT = 70;
+        public const int TARGET_SODIUM = 2300;
+        public const int TARGET_CARBS = 300;
+        public const int TARGET_PROTEIN = 50;
 
-        public static Status CalorieStatus(int calories)
+        public const float HEATHY_BUFFER = 0.5f; // 50%
+
+        public static Status CalorieStatus(float calories)
         {
-            return Range(calories, 1500, 3000);
+            return Range(calories, TARGET_CALORIES * (1 - HEATHY_BUFFER), TARGET_CALORIES * (1 + HEATHY_BUFFER));
         }
 
-        public static Status FatStatus(int fat)
+        public static Status FatStatus(float fat)
         {
-            return Range(fat, 40, 90);
+            return Range(fat, TARGET_FAT * (1 - HEATHY_BUFFER), TARGET_FAT * (1 + HEATHY_BUFFER));
         }
 
-        public static Status SodiumStatus(int sodium)
+        public static Status SodiumStatus(float sodium)
         {
-            return Range(sodium, 1000, 3000);
+            return Range(sodium, TARGET_SODIUM * (1 - HEATHY_BUFFER), TARGET_SODIUM * (1 + HEATHY_BUFFER));
         }
 
-        public static Status CarbStatus(int carbs)
+        public static Status CarbStatus(float carbs)
         {
-            return Range(carbs, 175, 400);
+            return Range(carbs, TARGET_CARBS * (1 - HEATHY_BUFFER), TARGET_CARBS * (1 + HEATHY_BUFFER));
         }
 
-        public static Status ProteinStatus(int protein)
+        public static Status ProteinStatus(float protein)
         {
-            return Range(protein, 25, 75);
+            return Range(protein, TARGET_PROTEIN * (1 - HEATHY_BUFFER), TARGET_PROTEIN * (1 + HEATHY_BUFFER));
         }
 
-        public static bool IsHealthy(NutritionData data)
+        public static bool IsHealthy(PlayerNutritionData data)
         {
             return CalorieStatus(data.Calories) == Status.HEALTHY && FatStatus(data.Fat) == Status.HEALTHY && 
                 SodiumStatus(data.Sodium) == Status.HEALTHY && CarbStatus(data.Carbs) == Status.HEALTHY &&
@@ -45,7 +52,7 @@ namespace FoodOverhaul.Nutrition
         }
 
 
-        private static Status Range(int val, int min, int max)
+        private static Status Range(float val, float min, float max)
         {
             if (val < min)
             {

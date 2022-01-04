@@ -23,12 +23,12 @@ namespace FoodOverhaul.UI
         private const int FILL_SIZE = 32;
         private const int PIXEL_OFFSET = 4;
 
-        private static Asset<Texture2D> _background = ModContent.Request<Texture2D>("FoodOverhaul/Assets/UI/Bubble_Background");
-        private static DynamicSpriteFont _font = FontAssets.CombatText.First().Value;
+        private readonly static Asset<Texture2D> _background = ModContent.Request<Texture2D>("FoodOverhaul/Assets/UI/Bubble_Background");
+        private readonly static DynamicSpriteFont _font = FontAssets.CombatText.First().Value;
 
-        private int _value;
-        private int _maxValue;
-        private string _name;
+        private float _value;
+        private readonly int _maxValue;
+        private readonly string _name;
         public Color Color { get; set; }
         public enum Direction {LEFT, RIGHT, TOP, BOTTOM};
         public Direction TextAlignment { get; set; }
@@ -45,7 +45,7 @@ namespace FoodOverhaul.UI
             Width.Set(BORDER_SIZE, 0);
             Height.Set(BORDER_SIZE, 0);
         }
-        public void UpdateValue(int value)
+        public void UpdateValue(float value)
         {
             _value = value;
         }
@@ -83,8 +83,8 @@ namespace FoodOverhaul.UI
         }
         private void DrawValue(SpriteBatch spriteBatch, CalculatedStyle dim)
         {
-            Vector2 textSize = _font.MeasureString(_value + "") * 0.6f;
-            DynamicSpriteFontExtensionMethods.DrawString(spriteBatch, _font, _value + "", new Vector2(dim.X + (BORDER_SIZE / 2) - (textSize.X / 2), dim.Y + BORDER_SIZE / 2 - textSize.Y / 2), Color.White, 0, new Vector2(), 0.6f, SpriteEffects.None, 0);
+            Vector2 textSize = _font.MeasureString(Math.Round(_value) + "") * 0.6f;
+            DynamicSpriteFontExtensionMethods.DrawString(spriteBatch, _font, Math.Round(_value) + "", new Vector2(dim.X + (BORDER_SIZE / 2) - (textSize.X / 2), dim.Y + BORDER_SIZE / 2 - textSize.Y / 2), Color.White, 0, new Vector2(), 0.6f, SpriteEffects.None, 0);
         }
         private void DrawValueInBubble(SpriteBatch spriteBatch, CalculatedStyle dim)
         {
@@ -128,7 +128,7 @@ namespace FoodOverhaul.UI
         
         private float FillPercent()
         {
-            return (float)_value / _maxValue;
+            return _value / _maxValue;
         }
         private int PixelsToShow()
         {
