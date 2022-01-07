@@ -51,6 +51,16 @@ namespace FoodOverhaul.Nutrition
                 ProteinStatus(data.Protein) == Status.HEALTHY;
         }
 
+        public static int GetNumberOfHealthyValues(PlayerNutritionData data)
+        {
+            int count = 0;
+            count += CalorieStatus(data.Calories) == Status.HEALTHY ? 1 : 0;
+            count += FatStatus(data.Fat) == Status.HEALTHY ? 1 : 0;
+            count += SodiumStatus(data.Sodium) == Status.HEALTHY ? 1 : 0;
+            count += CarbStatus(data.Carbs) == Status.HEALTHY ? 1 : 0;
+            count += ProteinStatus(data.Protein) == Status.HEALTHY ? 1 : 0;
+            return count;
+        }
 
         private static Status Range(float val, float min, float max)
         {

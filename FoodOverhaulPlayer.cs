@@ -7,6 +7,7 @@ using FoodOverhaul.Util;
 using Terraria.GameInput;
 using FoodOverhaul.UI;
 using FoodOverhaul.Nutrition;
+using FoodOverhaul.Buffs;
 
 namespace FoodOverhaul
 {
@@ -28,18 +29,58 @@ namespace FoodOverhaul
         }
         public override void PreUpdateBuffs()
         {
-            if(HealthinessHelper.IsHealthy(PlayerNutrition))
+            int healthyValues = HealthinessHelper.GetNumberOfHealthyValues(PlayerNutrition);
+            if(healthyValues == 0)
             {
-                Player.AddBuff(BuffID.WellFed, TimeUtil.Minutes(10));
+                Player.AddBuff(ModContent.BuffType<MalnutritionDebuff>(), 2, quiet: false);
+            }
+            else if(healthyValues == 1)
+            {
+                Player.AddBuff(BuffID.WellFed, 2, quiet: false);
+            }else if(healthyValues == 5)
+            {
+                Player.AddBuff(BuffID.WellFed3, 2, quiet: false);
+            }
+            else
+            {
+                Player.AddBuff(BuffID.WellFed2, 2, quiet: false);
             }
         }
 
         public override void PostUpdateBuffs()
         {
-            if(!HealthinessHelper.IsHealthy(PlayerNutrition))
+            int healthyValues = HealthinessHelper.GetNumberOfHealthyValues(PlayerNutrition);
+            if(healthyValues == 0)
+            {
+                ClearWellFedExceptFor(null);
+            }
+            else if(healthyValues == 1)
+            {
+                ClearWellFedExceptFor(BuffID.WellFed);
+            }
+            else if(healthyValues == 5)
+            {
+                ClearWellFedExceptFor(BuffID.WellFed3);
+            }
+            else
+            {
+                ClearWellFedExceptFor(BuffID.WellFed2);
+            }
+            
+        }
+
+        private void ClearWellFedExceptFor(int? buffId)
+        {
+            if(buffId != BuffID.WellFed)
             {
                 Player.ClearBuff(BuffID.WellFed);
+            }
+            if (buffId != BuffID.WellFed2)
+            {
                 Player.ClearBuff(BuffID.WellFed2);
+            }
+            if (buffId != BuffID.WellFed3)
+            {
                 Player.ClearBuff(BuffID.WellFed3);
             }
         }
