@@ -3,6 +3,9 @@ using Terraria;
 using Terraria.ModLoader;
 using FoodOverhaul.Util;
 using FoodOverhaul.UI;
+using FoodOverhaul.Nutrition;
+using System;
+using Terraria.ID;
 namespace FoodOverhaul.Items.Food
 {
     public class GlobalFood : GlobalItem
@@ -14,12 +17,11 @@ namespace FoodOverhaul.Items.Food
 
         public override void SetDefaults(Item item)
         {
-            base.SetDefaults(item);
+            
         }
 
         public override void OnConsumeItem(Item item, Player player)
         {
-            ChatUtil.Info("I ate Food Today");
             FoodOverhaulPlayer modPlayer;
             try
             {
@@ -43,23 +45,22 @@ namespace FoodOverhaul.Items.Food
             List<TooltipLine> list = new();
             bool found = NutritionServerConfig.Get().NutritionFacts.TryGetValue(new ItemNutritionPair(item.type, new()), out ItemNutritionPair pair);
             NutritionData val = found ? pair.Nutrition : new();
+            FoodOverhaulPlayer player = FoodOverhaulPlayer.GetModPlayer();
             if (!val.Empty())
             {
-                TooltipLine tooltip = new(mod, "Nutrition Facts", "Nutrition Facts:");
-                list.Add(tooltip);
-                tooltip = new(mod, "Calories", val.Calories + " Calories");
+                TooltipLine tooltip = GetTooltip(mod, "Calories", val.Calories, player.PlayerNutrition.Calories, HealthinessHelper.TARGET_CALORIES, "");
                 tooltip.overrideColor = NutritionData.CALORIES_COLOR;
                 list.Add(tooltip);
-                tooltip = new(mod, "Fat", val.Fat + " Fat");
+                tooltip = GetTooltip(mod, "Fat", val.Fat, player.PlayerNutrition.Fat, HealthinessHelper.TARGET_FAT, "g");
                 tooltip.overrideColor = NutritionData.FAT_COLOR;
                 list.Add(tooltip);
-                tooltip = new(mod, "Sodium", val.Sodium + " Sodium");
+                tooltip = GetTooltip(mod, "Sodium", val.Sodium, player.PlayerNutrition.Sodium, HealthinessHelper.TARGET_SODIUM, "mg");
                 tooltip.overrideColor = NutritionData.SODIUM_COLOR;
                 list.Add(tooltip);
-                tooltip = new(mod, "Carbs", val.Carbs + " Carbs");
+                tooltip = GetTooltip(mod, "Carbs", val.Carbs, player.PlayerNutrition.Carbs, HealthinessHelper.TARGET_CARBS, "g");
                 tooltip.overrideColor = NutritionData.CARBS_COLOR;
                 list.Add(tooltip);
-                tooltip = new(mod, "Protein", val.Protein + " Protein");
+                tooltip = GetTooltip(mod, "Protein", val.Protein, player.PlayerNutrition.Protein, HealthinessHelper.TARGET_PROTEIN, "g");
                 tooltip.overrideColor = NutritionData.PROTEIN_COLOR;
                 list.Add(tooltip);
             }
@@ -69,6 +70,18 @@ namespace FoodOverhaul.Items.Food
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {
             tooltips.AddRange(GetNutritionTooltip(Mod, item));
+        }
+
+        private static TooltipLine GetTooltip(Mod mod, string label, int value, float playerValue, int max, string unit)
+        {
+            double percent = Math.Round((float)value / max * 100);
+            double playerPercent = Math.Round((float)playerValue / max * 100);
+            string toShow = $"[c/FF0000:{percent + playerPercent}%]";
+            if (percent + playerPercent <= 100 * (1 + HealthinessHelper.HEATHY_BUFFER) && percent + playerPercent >= 100 * (1 - HealthinessHelper.HEATHY_BUFFER))
+            {
+                toShow = $"[c/00FF00:{percent + playerPercent}%]";
+            }
+            return new(mod, label, label + " " + value + unit + " (" + percent + "%) -> " + toShow);
         }
 
     }

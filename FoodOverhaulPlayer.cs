@@ -57,17 +57,22 @@ namespace FoodOverhaul
         public override void LoadData(TagCompound tag)
         {
             PlayerNutrition = Initial();
-            try
+            PlayerNutrition.Protein = TryOrDefault("protein", tag);
+            PlayerNutrition.Calories = TryOrDefault("calories", tag);
+            PlayerNutrition.Sodium = TryOrDefault("sodium", tag);
+            PlayerNutrition.Carbs = TryOrDefault("carbs", tag);
+            PlayerNutrition.Fat = TryOrDefault("fat", tag);
+        }
+
+        private float TryOrDefault(string key, TagCompound tag)
+        {
+            if (tag.ContainsKey(key)) 
             {
-                PlayerNutrition.Protein = tag.GetFloat("protein");
-                PlayerNutrition.Calories = tag.GetFloat("calories");
-                PlayerNutrition.Sodium = tag.GetFloat("sodium");
-                PlayerNutrition.Carbs = tag.GetFloat("carbs");
-                PlayerNutrition.Fat = tag.GetFloat("fat");
+                return tag.GetFloat(key);
             }
-            catch (Exception)
-            {
-            }
+            Mod.Logger.Error("Failed to Load value for " + key);
+            return 0;
+            
         }
 
         public override void SaveData(TagCompound tag)
@@ -95,9 +100,9 @@ namespace FoodOverhaul
             NutritionBubblesUI.UpdateNutrition(PlayerNutrition);
         }
 
-        public override void PlayerConnect(Player player)
+        public override void OnEnterWorld(Player player)
         {
-            NutritionBubblesUI.UpdateNutrition(PlayerNutrition);
+            NutritionBubblesUI.UpdateNutrition(player.GetModPlayer<FoodOverhaulPlayer>().PlayerNutrition);
         }
 
         public static FoodOverhaulPlayer GetModPlayer()
