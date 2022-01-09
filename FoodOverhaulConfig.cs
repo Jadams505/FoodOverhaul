@@ -8,6 +8,8 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using FoodOverhaul.Util;
 using FoodOverhaul.UI;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace FoodOverhaul
 {
@@ -21,6 +23,8 @@ namespace FoodOverhaul
         [DefaultValue(80)]
         [Range(0, 2000)]
         public int UIPosY;
+        [DefaultValue(true)]
+        public bool UIVisible;
         [DefaultValue(true)]
         public bool UIPositionLocked;
         [DefaultValue(true)]
@@ -39,8 +43,17 @@ namespace FoodOverhaul
             NutritionBubblesUI.SwitchOrientation(DisplayUIHorizontally);
             NutritionBubblesUI.AlignBubbles();
             NutritionBubblesUI.ShowPercent(DisplayPercents);
+            NutritionBubblesUI.ToggleVisibility(UIVisible);
         }
 
+        public void Save()
+        {
+            Directory.CreateDirectory(ConfigManager.ModConfigPath);
+            string filename = Mod.Name + "_" + Name + ".json";
+            string path = Path.Combine(ConfigManager.ModConfigPath, filename);
+            string json = JsonConvert.SerializeObject((object)this, ConfigManager.serializerSettings);
+            File.WriteAllText(path, json);
+        }
         public static NutritionClientConfig Get()
         {
             return ModContent.GetInstance<NutritionClientConfig>();

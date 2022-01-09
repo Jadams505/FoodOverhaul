@@ -8,6 +8,9 @@ using Terraria.GameInput;
 using FoodOverhaul.UI;
 using FoodOverhaul.Nutrition;
 using FoodOverhaul.Buffs;
+using Terraria.ModLoader.Config;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace FoodOverhaul
 {
@@ -15,12 +18,13 @@ namespace FoodOverhaul
     {
 
         public int Tick;
-
+        public bool ModifiedValuesOutsideOfConfig;
         public PlayerNutritionData PlayerNutrition;
 
         public FoodOverhaulPlayer()
         {
             PlayerNutrition = Initial();
+            ModifiedValuesOutsideOfConfig = false;
         }
 
         public void AddNutrition(NutritionData data)
@@ -131,7 +135,8 @@ namespace FoodOverhaul
             if (KeybindManager.toggleNutrition.JustPressed)
             {  
                 NutritionBubblesUI.UpdateNutrition(PlayerNutrition);
-                NutritionBubblesUI.Toggle();
+                NutritionBubblesUI.ToggleVisibility(!NutritionBubblesUI.Enabled);
+                ModifiedValuesOutsideOfConfig = true;
             }
         }
 
@@ -144,6 +149,16 @@ namespace FoodOverhaul
         public override void OnEnterWorld(Player player)
         {
             NutritionBubblesUI.UpdateNutrition(player.GetModPlayer<FoodOverhaulPlayer>().PlayerNutrition);
+        }
+
+        public override void PreSavePlayer()
+        {
+            NutritionClientConfig config = NutritionClientConfig.Get();
+            if (config != null && ModifiedValuesOutsideOfConfig)
+            {
+                config.Save();
+            }
+            ModifiedValuesOutsideOfConfig = false;
         }
 
         public static FoodOverhaulPlayer GetModPlayer()

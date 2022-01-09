@@ -67,8 +67,12 @@ namespace FoodOverhaul.UI
             NutritionClientConfig config = NutritionClientConfig.Get();
             if (config != null)
             {
-                config.UIPosX = (int)_panel.Left.Pixels;
-                config.UIPosY = (int)_panel.Top.Pixels;
+                if(config.UIPosX != (int)_panel.Left.Pixels && config.UIPosY != (int)_panel.Top.Pixels)
+                {
+                    config.UIPosX = (int)_panel.Left.Pixels;
+                    config.UIPosY = (int)_panel.Top.Pixels;
+                    FoodOverhaulPlayer.GetModPlayer().ModifiedValuesOutsideOfConfig = true;
+                }
             }
         }
 
@@ -133,6 +137,24 @@ namespace FoodOverhaul.UI
             }
         }
 
+        public static void ToggleVisibility(bool visible)
+        {
+            Enabled = visible;
+            if(NutritionClientConfig.Get() != null)
+            {
+                NutritionClientConfig.Get().UIVisible = visible;
+            }
+            if (visible)
+            {
+                _interface?.SetState(_state);
+            }
+            else
+            {
+                _panel?.Unselect();
+                _interface?.SetState(null);
+            }
+        }
+
         public static void Load()
         {
             if (!Main.dedServ)
@@ -161,30 +183,6 @@ namespace FoodOverhaul.UI
                 _interface.Draw(Main.spriteBatch, time);
             }
             return true;
-        }
-
-        public static void Toggle()
-        {
-            Enabled = !Enabled;
-            if (Enabled)
-            {
-                Show();
-            }
-            else
-            {
-                Hide();
-            }
-        }
-
-        private static void Show()
-        {
-            _interface?.SetState(_state);
-        }
-
-        private static void Hide()
-        {
-            _panel.Unselect();
-            _interface?.SetState(null);
         }
 
         public static void AlignBubbles()
