@@ -8,9 +8,7 @@ using Terraria.GameInput;
 using FoodOverhaul.UI;
 using FoodOverhaul.Nutrition;
 using FoodOverhaul.Buffs;
-using Terraria.ModLoader.Config;
-using System.IO;
-using Newtonsoft.Json;
+using System;
 
 namespace FoodOverhaul
 {
@@ -33,44 +31,47 @@ namespace FoodOverhaul
         }
         public override void PreUpdateBuffs()
         {
+            
             int healthyValues = HealthinessHelper.GetNumberOfHealthyValues(PlayerNutrition);
-            if(healthyValues == 0)
+            switch (healthyValues)
             {
-                Player.AddBuff(ModContent.BuffType<MalnutritionDebuff>(), 2, quiet: false);
-            }
-            else if(healthyValues == 1)
-            {
-                Player.AddBuff(BuffID.WellFed, 2, quiet: false);
-            }else if(healthyValues == 5)
-            {
-                Player.AddBuff(BuffID.WellFed3, 2, quiet: false);
-            }
-            else
-            {
-                Player.AddBuff(BuffID.WellFed2, 2, quiet: false);
+                case 0:
+                case 1:
+                case 2:
+                    Player.AddBuff(ModContent.BuffType<MalnutritionDebuff>(), 2, quiet: false);
+                    break;
+                case 3:
+                    Player.AddBuff(BuffID.WellFed, 2, quiet: false);
+                    break;
+                case 4:
+                    Player.AddBuff(BuffID.WellFed2, 2, quiet: false);
+                    break;
+                case 5:
+                    Player.AddBuff(BuffID.WellFed3, 2, quiet: false);
+                    break;
             }
         }
 
         public override void PostUpdateBuffs()
         {
             int healthyValues = HealthinessHelper.GetNumberOfHealthyValues(PlayerNutrition);
-            if(healthyValues == 0)
+            switch (healthyValues)
             {
-                ClearWellFedExceptFor(null);
+                case 0:
+                case 1:
+                case 2:
+                    ClearWellFedExceptFor(null);
+                    break;
+                case 3:
+                    ClearWellFedExceptFor(BuffID.WellFed);
+                    break;
+                case 4:
+                    ClearWellFedExceptFor(BuffID.WellFed2);
+                    break;
+                case 5:
+                    ClearWellFedExceptFor(BuffID.WellFed3);
+                    break;
             }
-            else if(healthyValues == 1)
-            {
-                ClearWellFedExceptFor(BuffID.WellFed);
-            }
-            else if(healthyValues == 5)
-            {
-                ClearWellFedExceptFor(BuffID.WellFed3);
-            }
-            else
-            {
-                ClearWellFedExceptFor(BuffID.WellFed2);
-            }
-            
         }
 
         private void ClearWellFedExceptFor(int? buffId)
@@ -142,7 +143,7 @@ namespace FoodOverhaul
 
         public override void OnRespawn(Player player)
         {
-            player.GetModPlayer<FoodOverhaulPlayer>().PlayerNutrition = Initial(); // on death reset nutrition
+            player.GetModPlayer<FoodOverhaulPlayer>().PlayerNutrition = Respawn(Math.Clamp(1 - HealthinessHelper.HEATHY_BUFFER - 0.1f, 0, 1));
             NutritionBubblesUI.UpdateNutrition(PlayerNutrition);
         }
 
@@ -178,6 +179,13 @@ namespace FoodOverhaul
             return new PlayerNutritionData(new NutritionData(calories: HealthinessHelper.TARGET_CALORIES,
                 fat: HealthinessHelper.TARGET_FAT, sodium: HealthinessHelper.TARGET_SODIUM, carbs: HealthinessHelper.TARGET_CARBS,
                 protein: HealthinessHelper.TARGET_PROTEIN));
+        }
+
+        public static PlayerNutritionData Respawn(float percent)
+        {
+            return new PlayerNutritionData(calories: HealthinessHelper.TARGET_CALORIES * percent, fat: HealthinessHelper.TARGET_FAT * percent,
+                sodium: HealthinessHelper.TARGET_SODIUM * percent, carbs: HealthinessHelper.TARGET_CARBS * percent,
+                protein: HealthinessHelper.TARGET_PROTEIN * percent);
         }
 
     }

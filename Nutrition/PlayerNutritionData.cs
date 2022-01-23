@@ -24,6 +24,15 @@ namespace FoodOverhaul.Nutrition
             Protein = data.Protein;
         }
 
+        public PlayerNutritionData(float calories, float fat, float sodium, float carbs, float protein)
+        {
+            Calories = calories;
+            Fat = fat;
+            Sodium = sodium;
+            Carbs = carbs;
+            Protein = protein;
+        }
+
         private static float ToBounds(float num)
         {
             return Math.Clamp(num, 0, NutritionData.MAX);

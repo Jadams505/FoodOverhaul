@@ -64,9 +64,9 @@ namespace FoodOverhaul
         public override ConfigScope Mode => ConfigScope.ServerSide;
 
         
-        public HashSet<ItemNutritionPair> NutritionFacts = DefaultNutritionValues.RealisticDefault();
+        public HashSet<ItemNutritionPair> NutritionFacts = DefaultNutritionValues.Defaults();
 
-        [DefaultValue(8 * 60)] // 8 seconds give or take
+        [DefaultValue(15 * 60)] // 15 seconds give or take
         [Range(1, 216000)]
         public int TickRate;
 

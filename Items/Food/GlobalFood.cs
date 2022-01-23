@@ -13,19 +13,28 @@ namespace FoodOverhaul.Items.Food
     {
         public override bool AppliesToEntity(Item entity, bool lateInstantiation)
         {
-            return lateInstantiation && NutritionServerConfig.Get().NutritionFacts.Contains(new ItemNutritionPair(entity.type, new()));
+            return true;
         }
 
         public override void SetDefaults(Item item)
         {
 
         }
+        
+        public override bool? UseItem(Item item, Player player)
+        {
+            if(NutritionServerConfig.Get().NutritionFacts.Contains(new ItemNutritionPair(item.type, new()))){
+                return true;
+            }
+            return base.UseItem(item, player);  
+        }
+        
+
         public override void OnConsumeItem(Item item, Player player)
         {
-            FoodOverhaulPlayer modPlayer;
             try
             {
-                modPlayer = player.GetModPlayer<FoodOverhaulPlayer>();
+                FoodOverhaulPlayer modPlayer = player.GetModPlayer<FoodOverhaulPlayer>();
                 bool found = NutritionServerConfig.Get().NutritionFacts.TryGetValue(new ItemNutritionPair(item.type, new()), out ItemNutritionPair pair);
                 if (found)
                 {
@@ -45,9 +54,13 @@ namespace FoodOverhaul.Items.Food
             if (PlayerInput.Triggers.Current.QuickBuff && NutritionServerConfig.Get().NutritionFacts.
                 Contains(new ItemNutritionPair(item.type, new())))
             {
+                if (player.HeldItem.Equals(item))
+                {
+                    return true;
+                }
                 return false;
             }
-            return base.ConsumeItem(item, player);
+            return true;
         }
         public override void ModifyTooltips(Item item, List<TooltipLine> tooltips)
         {

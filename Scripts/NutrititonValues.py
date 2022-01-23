@@ -2,23 +2,49 @@ from tkinter import Tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 import os
 
+class Key:
+	def __init__(self, mod, name, itemid, calories, fat, sodium, carbs, protein):
+		self.mod = mod
+		self.itemid = itemid
+		self.name = name
+		self.calories = calories
+		self.fat = fat
+		self.sodium = sodium
+		self.carbs = carbs
+		self.protein = protein
+
+
 def parseContents():
-	key = contents[0].split(",")
-	key = [key.index("Mod"), key.index("Item ID"), key.index("Calories"),
-		key.index("Fat"), key.index("Sodium"), key.index("Carbs"), key.index("Protein")]
+	keyarray = contents[0].split(",")
+	key = Key(keyarray.index("Mod"), keyarray.index("Name"), keyarray.index("Item ID"), keyarray.index("Calories"),
+		keyarray.index("Fat"), keyarray.index("Sodium"), keyarray.index("Carbs"), keyarray.index("Protein"))
 	formatted = []
 	for i in range(1, len(contents)):
 		line = contents[i]
 		tokens = line.split(",")
-		if (tokens[key[1]].isdigit() and tokens[key[2]].isdigit() and tokens[key[3]].isdigit() 
-			and tokens[key[4]].isdigit() and tokens[key[5]].isdigit() and tokens[key[6]].isdigit()):
+		if (tokens[key.calories].isdigit() and tokens[key.fat].isdigit() 
+			and tokens[key.sodium].isdigit() and tokens[key.carbs].isdigit() and tokens[key.protein].isdigit()):
 			formatted.append(format(tokens, key))
+			
 	return formatted
 
 
 def format(tokens, key):
-	return ("set.Add(VanillaEntry(id: " + tokens[key[1]] + "," + " calories: " + tokens[key[2]] + ", fat: " + tokens[key[3]] + 
-		 ", sodium: " + tokens[key[4]] + ", carbs: " + tokens[key[5]] + ", protein: " + tokens[key[6]] + "));")
+	
+	mod = tokens[key.mod]
+	name = tokens[key.name]
+	itemid = tokens[key.itemid]
+	calories = tokens[key.calories]
+	fat = tokens[key.fat]
+	sodium = tokens[key.sodium]
+	carbs = tokens[key.carbs]
+	protein = tokens[key.protein]
+	if mod == "Terraria":
+		return ("AddVanillaEntry(set, id: " + itemid + "," + " calories: " + calories + ", fat: " + fat + 
+		 ", sodium: " + sodium + ", carbs: " + carbs + ", protein: " + protein + ");")
+	else:
+		return ("AddModdedEntry(set, mod: \"" + mod + "\", name: \"" + name + "\", calories: " + calories + ", fat: " + fat + 
+		 ", sodium: " + sodium + ", carbs: " + carbs + ", protein: " + protein + ");")
 
 
 Tk().withdraw()

@@ -17,7 +17,7 @@ namespace FoodOverhaul.Nutrition
         public const int TARGET_CARBS = 300;
         public const int TARGET_PROTEIN = 50;
 
-        public const float HEATHY_BUFFER = 0.5f; // 50%
+        public const float HEATHY_BUFFER = 0.25f;
 
         public static Status CalorieStatus(float calories)
         {

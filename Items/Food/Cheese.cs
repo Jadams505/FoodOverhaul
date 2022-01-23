@@ -1,31 +1,33 @@
 using Terraria;
 using Terraria.ID;
 using FoodOverhaul.Util;
+using Terraria.ModLoader;
+using FoodOverhaul.Nutrition;
 
 namespace FoodOverhaul.Items.Food
 {
-	public class Cheese : ModFood
+	public class Cheese : ModItem
 	{
-		public Cheese()
-        {
-			nutrition.Calories = 110;
-			nutrition.Fat = 9;
-			nutrition.Sodium = 180;
-			nutrition.Carbs = 2;
-			nutrition.Protein = 7;
-        }
-
 		public override void SetDefaults()
 		{
-			Item.DefaultToFood(22, 22, BuffID.WellFed, TimeUtil.Minutes(10));
+			Item.consumable = true;
+			Item.UseSound = SoundID.Item2;
+			Item.useStyle = ItemUseStyleID.EatFood;
+			Item.useTurn = true;
+			Item.maxStack = 30;
+			Item.width = 22;
+			Item.height = 22;
+			Item.rare = ItemRarityID.Blue;
+			Item.value = Item.buyPrice(0, 0, 20);
+			Item.useAnimation = 17;
+			Item.useTime = 17;
 		}
 
-		public override void AddRecipes()
+        public override void AddRecipes()
 		{
 			Recipe recipe = CreateRecipe();
-			recipe.AddIngredient(ItemID.DirtBlock, 10);
+			recipe.AddIngredient(ItemID.MilkCarton, 10);
 			recipe.Register();
 		}
-
     }
 }
