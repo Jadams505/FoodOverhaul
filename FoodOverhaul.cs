@@ -3,6 +3,8 @@ using FoodOverhaul.Util;
 using Terraria;
 using Terraria.Localization;
 using Terraria.ID;
+using FoodOverhaul.Tiles;
+using FoodOverhaul.WorldGen.Trees;
 
 namespace FoodOverhaul
 {
