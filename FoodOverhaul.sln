@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoodOverhaul", "FoodOverhaul.csproj", "{7A260A54-695B-4DC4-8141-02330B8C1CC6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tModLoader", "..\..\..\TMod 1.4.3\tModLoader.csproj", "{5AD34C8F-8FAD-4481-BC07-52E6F0614300}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tModLoader", "..\..\Decompiled1.4.3.6\tModLoader.csproj", "{605692F2-60CA-4D49-AD0D-CD8FA54B2C1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{7A260A54-695B-4DC4-8141-02330B8C1CC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A260A54-695B-4DC4-8141-02330B8C1CC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A260A54-695B-4DC4-8141-02330B8C1CC6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5AD34C8F-8FAD-4481-BC07-52E6F0614300}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5AD34C8F-8FAD-4481-BC07-52E6F0614300}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5AD34C8F-8FAD-4481-BC07-52E6F0614300}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5AD34C8F-8FAD-4481-BC07-52E6F0614300}.Release|Any CPU.Build.0 = Release|Any CPU
+		{605692F2-60CA-4D49-AD0D-CD8FA54B2C1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{605692F2-60CA-4D49-AD0D-CD8FA54B2C1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{605692F2-60CA-4D49-AD0D-CD8FA54B2C1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{605692F2-60CA-4D49-AD0D-CD8FA54B2C1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
